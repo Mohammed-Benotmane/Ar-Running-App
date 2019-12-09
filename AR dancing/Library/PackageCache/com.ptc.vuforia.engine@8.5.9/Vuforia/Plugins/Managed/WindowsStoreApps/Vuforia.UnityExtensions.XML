@@ -1,0 +1,3784 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>Vuforia.UnityExtensions</name>
+  </assembly>
+  <members>
+    <member name="T:Vuforia.ARController">
+      <summary>
+            A camera listener gets all lifecycle events from the VuforiaBehaviour
+            of an ARCamera.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTargetFinder">
+      <summary>
+            This class represents a service that retrieves image targets using cloud-based recognition.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetFinder.StartInit(System.String,System.String)">
+      <summary>
+             Starts initialization of the cloud-based recognition system.
+            
+             Initialization of the cloud-based recognition system may take significant
+             time and is thus handled in a background process. Use GetInitState() to
+             query the initialization progress and result. Pass in the user/password
+             for authenticating with the cloud reco server.
+             </summary>
+    </member>
+    <member name="T:Vuforia.ModelRecoBehaviour">
+      <summary>
+            NOTE: This class is obsolete and no longer functional. It is used only for migration purposes.
+            </summary>
+    </member>
+    <member name="F:Vuforia.ModelRecoBehaviour.Database">
+      <summary>
+            The name of the Device Database
+            </summary>
+    </member>
+    <member name="P:Vuforia.ModelRecoBehaviour.ModelRecoEnabled">
+      <summary>
+            Whether model reco has been enabled in the menu
+            </summary>
+    </member>
+    <member name="T:Vuforia.ObjectRecoBehaviour">
+      <summary>
+            This is the base class that encapsulates generic "object recognition" behaviour,
+            such as Cloud Reocgnition of Image Targets and Model Recognition.
+            Specialized implementations of Cloud Recognition and Model Recognition are in their respective classes.
+            </summary>
+    </member>
+    <member name="P:Vuforia.ObjectRecoBehaviour.RecoEnabled">
+      <summary>
+            If cloud has been enabled in the menu
+            </summary>
+    </member>
+    <member name="P:Vuforia.ObjectRecoBehaviour.RecoInitialized">
+      <summary>
+            If cloud reco has been initialized yet
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectRecoBehaviour.RegisterEventHandler(Vuforia.IObjectRecoEventHandler)">
+      <summary>
+            Registers an event handler with this ObjectRecoBehaviour which will be called on events
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectRecoBehaviour.UnregisterEventHandler(Vuforia.IObjectRecoEventHandler)">
+      <summary>
+            Unregisters an event handler
+            </summary>
+    </member>
+    <member name="T:Vuforia.IlluminationManager">
+      <summary>
+            Provides data on the estimated illumination values in the current frame
+            such as illumination intensity or ambient light color temperature
+            Get a configured instance of the IlluminationManager from the StateManager
+            </summary>
+    </member>
+    <member name="P:Vuforia.IlluminationManager.AmbientIntensity">
+      <summary>
+            The current ambient intensity for the scene measured in Lumens. The value
+            may not be available on all platforms. When the value is unavailable
+            NULL will be returned.
+            
+            This value will be valid when ARKit is being used by Vuforia Fusion.
+            </summary>
+    </member>
+    <member name="P:Vuforia.IlluminationManager.AmbientColorTemperature">
+      <summary>
+            The current color temperature for the scene measured in Kelvin. The value
+            may not be available on all platforms. When the value is unavailable
+            NULL will be returned.
+            
+            This value will be valid when ARKit is being used by Vuforia Fusion.
+            
+            </summary>
+    </member>
+    <member name="P:Vuforia.IlluminationManager.IntensityCorrection">
+      <summary>
+             Returns a floating point intensity value which can be applied to a
+             shader when rendering the color for an augmentation to reflect the
+             ambient light in the scene.
+            
+             Intensity correction usage is described here,
+             https://library.vuforia.com/content/vuforia-library/en/articles/Solution/using-vuforia-fusion-illumination.html
+            
+             Intensity correction is a value that can be applied directly to a shader. Values
+             are in the range (0.0, 1.0), zero is black and 1.0 is white.
+            
+             If rendering in gamma space divide by 0.466 (middle grey in gamma) and multiply
+             by the final rendered color.
+            
+             In a linear space use pow(intensityCorrection, 2.2)/0.18
+             pow(intensityCorrection, 2.2) converts to linear space and then the value is
+             normalized by dividing by 0.18 middle grey in linear space.
+            
+             The value will always be valid for use. 0.466 (middle grey) is used in cases where
+             the platform does not supply a value.
+             </summary>
+    </member>
+    <member name="P:Vuforia.IlluminationManager.ColorCorrection">
+      <summary>
+             \returns a Vec4F which contains RGBA color correction
+             values which can be applied to a shader when rendering the color for an
+             augmentation to reflect the ambient light in the scene.
+            
+             Color correction usage is described here,
+             https://library.vuforia.com/content/vuforia-library/en/articles/Solution/using-vuforia-fusion-illumination.html
+            
+             All values are reported in gamma space where gamma is 2.2.
+             When used in a gamma space component wise multiply the values with the final
+             calculated color.
+            
+             In a linear color space convert to linear using pow(colorCorrection[i], 2.2) and
+             then component wise multiply the values with the final calculated color component.
+            
+             The values will always be valid for use. 1.0 is used in cases where
+             the platform does not supply values.
+            
+             This value will differ from the default when ARCore is being used by Vuforia Fusion.
+             </summary>
+    </member>
+    <member name="T:Vuforia.PreviewModelTurnOffBehaviour">
+      <summary>
+            A utility behaviour to disable rendering of an editor preview model at run time.
+            </summary>
+    </member>
+    <member name="T:Vuforia.PositionalDeviceTracker">
+      <summary>
+            The PositionalDeviceTracker tracks a device in the world by relying on
+            6DOF sensor tracking, delivering both position and rotation. The
+            PositionalDeviceTracker controls position and rotation of the camera
+            in the Unity scene using a physical unit (meter).
+            </summary>
+    </member>
+    <member name="M:Vuforia.PositionalDeviceTracker.Reset">
+      <summary>
+            Reset the tracker
+            On some platforms a new world coordinate system may be created
+            with the device's current position and orientation as the origin.
+            On some platforms the underlying Vuforia Fusion provider may also be reset.
+            Any internal data will be destroyed.
+            All created anchors will be destroyed. It is recommended to call ResetAnchors() afterwards.
+            <returns>true if the positional device tracker correctly reset</returns></summary>
+    </member>
+    <member name="M:Vuforia.PositionalDeviceTracker.CreateMidAirAnchor(System.String,UnityEngine.Vector3,UnityEngine.Quaternion)">
+      <summary>
+            Creates an Anchor Trackable for MidAir using the Transform of the pose (position/rotation) where it should be anchored.
+            </summary>
+      <remarks>
+            When using VUFORIA_SENSOR_FUSION, Anchors created with this method are not guaranteed to receive any
+            further position updates after the device tracker recovers from a limited tracking state.
+            </remarks>
+      <param name="name">The logical name of the anchor. This must be unique among all created anchors.</param>
+      <param name="transform">The transform of the pose at which the anchor will be created</param>
+      <returns>Anchor that can be used to configure an AnchorBehaviour</returns>
+    </member>
+    <member name="M:Vuforia.PositionalDeviceTracker.CreatePlaneAnchor(System.String,Vuforia.HitTestResult)">
+      <summary>
+            Creates an Anchor Trackable on a Plane using the HitTestResult of a previous SmartTerrain.HitTest 
+            of the (position/rotation) where it should be anchored.
+            </summary>
+      <param name="name">The logical name of the anchor. This must be unique among all created anchors.</param>
+      <param name="hitTestResult">The HitTestResult containing the pose at which the anchor will be created on a plane</param>
+      <returns>Anchor that can be used to configure an AnchorBehaviour</returns>
+    </member>
+    <member name="M:Vuforia.PositionalDeviceTracker.RegisterAnchorRemovedCallback(System.Action{Vuforia.Anchor})">
+      <summary>
+            Register for the event of when an Anchor is removed and no longer being tracked, for example after pause/resume in some cases
+            </summary>
+      <param name="onAnchorRemovedAction">
+      </param>
+    </member>
+    <member name="M:Vuforia.PositionalDeviceTracker.UnregisterAnchorRemovedCallback(System.Action{Vuforia.Anchor})">
+      <summary>
+            Unregister for the event of when an Anchor is removed and no longer being tracked, for example after pause/resume in some cases
+            </summary>
+      <param name="onAnchorRemovedAction">
+      </param>
+    </member>
+    <member name="M:Vuforia.PositionalDeviceTracker.ResetAnchors">
+      <summary>
+            Reset all anchors in the current scene. By default, the ContentPositioningBehaviour will delete all Anchors it has created.
+            If the ContentPositioningBehaviour is not use, the anchors must be dealt with explicitly by registering to the Callbacks
+            'RegisterAnchorRemovedCallback' and 'UnregisterAnchorRemovedCallback'
+            </summary>
+    </member>
+    <member name="M:Vuforia.AnchorBehaviour.ConfigureAnchor(Vuforia.Anchor)">
+      <summary>
+            Set the anchor that was created using the PositionalDeviceTracker.
+            This sets up the AnchorBehaviour so its pose will be updated
+            </summary>
+      <param name="anchor">
+      </param>
+    </member>
+    <member name="M:Vuforia.AnchorBehaviour.UnConfigureAnchor">
+      <summary>
+            Resets the AnchorBehaviour to an unconfigured state. It's unregistered from the trackable system
+            and its pose is no longer updated. It becomes unanchored.
+            </summary>
+    </member>
+    <member name="T:Vuforia.GuideViewCameraBehaviour">
+      <summary>
+            This class represents a Guide View Camera, which can be used to configure 
+            the guide view pose for detection of a Model Target.
+            When attaching this component to a game object, 
+            a Camera will be created automatically.
+            This Camera is only used at Editor time to faciliate the Application developer
+            to adjust the Pose visually by looking at the Camera preview.
+            At runtime, the Camera component will be automatically disabled.
+            </summary>
+    </member>
+    <member name="M:Vuforia.AndroidDatasets.AddExternalDatasetSearchDirs">
+      <summary>
+            This method inserts new dataset search roots for datasets defined in StreamingAssets/QCAR. This may
+            be used to streamline the "Split Application Binary" Unity feature under the Android plugin. This method
+             needs to be called before the datasets are loaded in the Start()-method.
+            </summary>
+    </member>
+    <member name="T:Vuforia.DigitalEyewearARController">
+      <summary>
+            This class handles stereo rendering
+            </summary>
+    </member>
+    <member name="P:Vuforia.DigitalEyewearARController.CentralAnchorPoint">
+      <summary>
+            This transform define the central anchor point.
+            All trackables are updated in the scene with reference to this transform.
+            By default (and if it's set to null) the transform of this component will be used, which is usually the ARCamera.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DigitalEyewearARController.EnableAutomaticFocusPointSelection(System.Boolean)">
+      <summary>
+            This method can be used to toggle automatic setting of the focus plane on HoloLens.
+            It should only be called after Vuforia has started (e.g. VuforiaStartedCallback)
+            By default, this is set to true, and Vuforia will automatically set the focus plane to the last
+            detected target.
+            However, if an the focus plane should be set to a hologram significantly offset from a target,
+            this method should be used to disable automatic focus plane setting and it should be done from 
+            application code instead
+            </summary>
+    </member>
+    <member name="T:Vuforia.EyewearDevice">
+      <summary>
+            Specialization of Device which is provided when Vuforia is running on a dedicated Eyewear device.
+            </summary>
+    </member>
+    <member name="M:Vuforia.EyewearDevice.IsSeeThru">
+      <summary>
+            Returns true if the Eyewear device detected has a see-through display.
+            </summary>
+    </member>
+    <member name="M:Vuforia.EyewearDevice.GetScreenOrientation">
+      <summary>
+            Returns the correct screen orientation to use when rendering for the eyewear device.
+            </summary>
+    </member>
+    <member name="T:Vuforia.GuideView">
+      <summary>
+            This class represents a Guide View which can be extracted from the DataSet
+            </summary>
+    </member>
+    <member name="P:Vuforia.GuideView.Name">
+      <summary>
+            The name of this guide view
+            </summary>
+    </member>
+    <member name="P:Vuforia.GuideView.Pose">
+      <summary>
+            The pose of the guide view in camera space
+            If set, it invalidates the Image property
+            </summary>
+    </member>
+    <member name="P:Vuforia.GuideView.Image">
+      <summary>
+            Guide view image is loaded and cached. 
+            </summary>
+    </member>
+    <member name="T:Vuforia.GuideView2DBehaviour">
+      <summary>
+            Class representing a 2D Guide View for Model Target Detection.
+            </summary>
+    </member>
+    <!-- Badly formed XML comment ignored for member "M:Vuforia.GuideView2DBehaviour.UpdateView(Vuforia.ModelTargetBehaviour,Vuforia.GuideView)" -->
+    <member name="T:Vuforia.GuideView3DBehaviour">
+      <summary>
+            Class representing a 3D Guide View for Model Target Detection.
+            </summary>
+    </member>
+    <member name="M:Vuforia.GuideView3DBehaviour.UpdateGuideViewPose(UnityEngine.Matrix4x4)">
+      <summary>
+            Updates the pose of the GuideView with the new values
+            Only executed if there is sufficient change to the old values
+            </summary>
+      <param name="newPose">The new pose in matrix form</param>
+    </member>
+    <member name="M:Vuforia.GuideView3DBehaviour.UpdateView(Vuforia.ModelTargetBehaviour,Vuforia.GuideView)">
+      <summary>
+            Updates the Guide View content and layout.
+            </summary>
+      <param name="modelTarget">
+      </param>
+      <param name="guideView">
+      </param>
+    </member>
+    <member name="T:Vuforia.GuideViewRenderingBehaviour">
+      <summary>
+            Class handling the activation/update/rendering of the Guide View for Model Target detection.
+            </summary>
+    </member>
+    <member name="M:Vuforia.GuideViewRenderingBehaviour.DeleteTargetGuideView">
+      <summary>
+            Destroys the internal GuideViewGameObject and makes sure that a 3D guideview object is returned to it's previous owner
+            </summary>
+    </member>
+    <member name="M:Vuforia.GuideViewRenderingBehaviour.DetachEvents">
+      <summary>
+            Deattaches the events from this instance to the guideview object.
+            Call before destroying
+            </summary>
+    </member>
+    <member name="M:Vuforia.GuideViewRenderingBehaviour.Initialize(Vuforia.ModelTargetBehaviour)">
+      <summary>
+            Setup function that creates the necessary GuideView rendering components for the provided ModelTargetBehaviour
+            Depending on the set GuideView display mode, different scene-trees are created
+            </summary>
+      <param name="modelTarget">The ModelTarget to be used for GuideView rendering</param>
+    </member>
+    <member name="T:Vuforia.ModelTargetMotionHint">
+      <summary>
+            The two modes influence the tracking behaviour of the selected target:
+            - Static tracks the model with a lower visual frequency, relying more on the underlying platform tracker.
+            - Adaptive tracks the model at a higher visual frequency, which requires more CPU power but produces better tracking quality
+            when objects are moved
+            </summary>
+    </member>
+    <member name="T:Vuforia.ModelTarget">
+      <summary>
+            A trackable behaviour to represent a flat natural feature target.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.GetBoundingBox">
+      <summary>
+            Returns the bounding box  of the target (in 3D scene units).
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.GetNumGuideViews">
+      <summary>
+            Queries native for the number of guide views for the model target
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.GetGuideView(System.Int32)">
+      <summary>
+            Returns a guide view with a given index
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.SetActiveGuideViewIndex(System.Int32)">
+      <summary>
+            Sets the index for an active GuideView for this ModelTarget
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.GetActiveGuideViewIndex">
+      <summary>
+            Returns the active GuideView index
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.SetMotionHint(Vuforia.ModelTargetMotionHint)">
+      <summary>
+            Set the motion hint, which can be STATIC with hint == 0 or ADAPTIVE with hint == 1.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTarget.GetMotionHint">
+      <summary>
+            Get the motion hint, which can be STATIC with hint == 0 or ADAPTIVE with hint == 1.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ModelTargetBehaviour">
+      <summary>
+            This class serves both as an augmentation definition for a ModelTarget in the editor
+            as well as a tracked ModelTarget result at runtime
+            </summary>
+    </member>
+    <member name="T:Vuforia.ModelTargetBehaviour.GuideViewDisplayMode">
+      <summary>
+            The different modes how Vuforia will provide guide view rendering:
+            - No guide view rendering (in case there is custom application logic to display some form of snapping view)
+            - 2D guide view using the integrated or overwritten texture
+            - 3D guide view using the integrated or overwritten 3D model
+            </summary>
+    </member>
+    <member name="F:Vuforia.ModelTargetBehaviour.GuideViewDisplayMode.NoGuideView">
+            Using camel-case for enum here, so that Unity automatically creates nice strings for in editor display
+            e.g. "NoGuideView" becomes "No Guide View" 
+        </member>
+    <member name="P:Vuforia.ModelTargetBehaviour.ModelTarget">
+      <summary>
+            The ModelTarget that this ModelTargetBehaviour augments
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTargetBehaviour.SetBoundingBox(UnityEngine.Vector3,UnityEngine.Vector3)">
+      <summary>
+            Set the Bounding Box (only in editor mode).
+            </summary>
+      <param name="minBBox">bounding box min position</param>
+      <param name="maxBBox">bounding box max position</param>
+    </member>
+    <member name="M:Vuforia.ModelTargetBehaviour.GetSize">
+      <summary>
+            Returns the size of this target in scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.ModelTargetBehaviour.SetLength(System.Single)">
+      <summary>
+            Set the length (x-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            </summary>
+      <param name="length">length value</param>
+    </member>
+    <member name="M:Vuforia.ModelTargetBehaviour.SetWidth(System.Single)">
+      <summary>
+            Set the width (y-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            </summary>
+      <param name="width">width value</param>
+    </member>
+    <member name="M:Vuforia.ModelTargetBehaviour.SetHeight(System.Single)">
+      <summary>
+            Set the height (z-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            </summary>
+      <param name="height">height value</param>
+    </member>
+    <member name="T:Vuforia.GLErrorHandler">
+      <summary>
+            This Script can be used to set a full screen error message if an error happens on startup.
+            (such as no OpenGL ES 2.0 support that is required for some samples).
+            </summary>
+    </member>
+    <member name="M:Vuforia.GLErrorHandler.SetError(System.String)">
+      <summary>
+            Sets an error text that is rendered every frame
+            </summary>
+    </member>
+    <member name="T:Vuforia.MaskOutBehaviour">
+      <summary>
+            Helper behaviour used to hide augmented objects behind the video background.
+            </summary>
+    </member>
+    <member name="T:Vuforia.HitTestEvent">
+      <summary>
+            An Event that passes a HitTestResult after a performed hit test. HitTestResult can be null.
+            </summary>
+    </member>
+    <member name="T:Vuforia.HitTestMode">
+      <summary>
+            The mode in which the surface is found.
+            Automatic is used to perform a hit test from the screen center periodically.
+            Interactive is used to perform a hit test on manual input (touch, mouse)
+            </summary>
+    </member>
+    <member name="M:Vuforia.SmartTerrain.HitTest(UnityEngine.Vector2,System.Single,Vuforia.HitTestResult@)">
+      <summary>
+            Performs a hit test on assumed surfaces from  point on the image. The provided position must be in normalized
+            image space coordinates.
+            Default height is ignored on ARKit enabled devices.
+            </summary>
+      <param name="imageSpacePos">The screen position in normalized image space coordinates.</param>
+      <param name="defaultHeight">The height at which the device is being held over the Ground Plane.</param>
+      <param name="hitTestResult">The first Hit Test result in the list of results of intersecting with assumed surfaces.</param>
+      <returns>Returns true if any surface was intersected</returns>
+    </member>
+    <member name="M:Vuforia.SmartTerrain.HitTest(UnityEngine.Vector2,System.Single,Vuforia.HitTestResult[]@)">
+      <summary>
+            Performs a hit test on assumed surfaces from  point on the image. The provided position must be in normalized
+            image space coordinates.
+            Default height is ignored on ARKit enabled devices.
+            </summary>
+      <param name="imageSpacePos">The screen position in normalized image space coordinates.</param>
+      <param name="defaultHeight">The height at which the device is being held over the Ground Plane.</param>
+      <param name="hitTestResults">The first Hit Test result in the list of results of intersecting with assumed surfaces.</param>
+      <returns>Returns true if any surface was intersected</returns>
+    </member>
+    <member name="F:Vuforia.PlaneFinderBehaviour.PlaneIndicator">
+      <summary>
+            The GameObject that is shown where a point on a plane is detected
+            </summary>
+    </member>
+    <member name="F:Vuforia.PlaneFinderBehaviour.Height">
+      <summary>
+            The assumed real world height of the camera in meters
+            </summary>
+    </member>
+    <member name="F:Vuforia.PlaneFinderBehaviour.OnInteractiveHitTest">
+      <summary>
+            Triggered on an interactive hit test
+            </summary>
+    </member>
+    <member name="F:Vuforia.PlaneFinderBehaviour.OnAutomaticHitTest">
+      <summary>
+            Triggered on an automatic hit test
+            </summary>
+    </member>
+    <member name="P:Vuforia.PlaneFinderBehaviour.HitTestMode">
+      <summary>
+            The currently set HitTestMode
+            Can bei either AUTOMATIC or INTERACTIVE
+            </summary>
+    </member>
+    <member name="M:Vuforia.PlaneFinderBehaviour.PerformHitTest(UnityEngine.Vector2)">
+      <summary>
+            Perform a manual hit test at the position in screen space
+            </summary>
+      <param name="screenPosition">
+      </param>
+    </member>
+    <member name="M:Vuforia.IHoloLensApiAbstraction.SetFocusPoint(UnityEngine.Vector3,UnityEngine.Vector3)">
+      <summary>
+            Sets the focus point, stablizing holograms in that area
+            </summary>
+    </member>
+    <member name="T:Vuforia.DeviceTracker">
+      <summary>
+            The DeviceTracker handles the rotational tracking for VR support
+            </summary>
+    </member>
+    <member name="T:Vuforia.DeviceTrackerARController">
+      <summary>
+            This is the main behaviour class that manages the device tracker
+            </summary>
+    </member>
+    <member name="F:Vuforia.DeviceTrackerARController.DEFAULT_HEAD_PIVOT">
+      <summary>
+            This is the default pivot point for the head model correction mode.
+            </summary>
+      <remarks>This value is defined in meters. If the scene is scaled to a different unit it is
+            necessary to define a custom pivot point in the same unit.</remarks>
+    </member>
+    <member name="F:Vuforia.DeviceTrackerARController.DEFAULT_HANDHELD_PIVOT">
+      <summary>
+            This is the default pivot point for the handheld model correction mode.
+            </summary>
+      <remarks>This value is defined in meters. If the scene is scaled to a different unit it is
+            necessary to define a custom pivot point in the same unit.</remarks>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.RegisterTrackerStartedCallback(System.Action)">
+      <summary>
+            Registers a callback that is called when the tracker has been started
+            </summary>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.UnregisterTrackerStartedCallback(System.Action)">
+      <summary>
+            Unregisters a previously registered callback
+            </summary>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.RegisterBeforeDevicePoseUpdateCallback(System.Action)">
+      <summary>
+            Register a callback that is invoked right before the device tracking pose
+            (i.e. head tracking) is applied in the scene
+            </summary>&gt;
+        </member>
+    <member name="M:Vuforia.DeviceTrackerARController.UnregisterBeforeDevicePoseUpdateCallback(System.Action)">
+      <summary>
+            Unregisters a previously registered callback
+            </summary>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.RegisterDevicePoseUpdatedCallback(System.Action)">
+      <summary>
+            Register a callback that is invoked after the device tracking pose
+            (i.e. head tracking) has been updated, but before any other trackables
+            have been updated in the scene. For a callback after all trackables have
+            been updated, please use VuforiaBehaviour.RegisterTrackablesUpdatedCallback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.UnregisterDevicePoseUpdatedCallback(System.Action)">
+      <summary>
+            Unregisters a previously registered callback
+            </summary>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.RegisterDevicePoseStatusChangedCallback(System.Action{Vuforia.TrackableBehaviour.Status})">
+      <summary>
+            Register an action for the status changed callback.
+            This callback whenever the tracker status changes. For example from "UNKNOWN" to "TRACKED",
+            </summary>
+      <param name="callback">
+      </param>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.UnregisterDevicePoseStatusChangedCallback(System.Action{Vuforia.TrackableBehaviour.Status})">
+      <summary>
+            Unregister the Status change callback
+            </summary>
+      <param name="callback">
+      </param>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.RegisterDevicePoseStatusChangedCallback(System.Action{Vuforia.TrackableBehaviour.Status,Vuforia.TrackableBehaviour.StatusInfo})">
+      <summary>
+            Register an action for the status changed callback.
+            This callback whenever the tracker status or status info changes. For example from "UNKNOWN" to "TRACKED",
+            </summary>
+      <param name="callback">
+      </param>
+    </member>
+    <member name="M:Vuforia.DeviceTrackerARController.UnregisterDevicePoseStatusChangedCallback(System.Action{Vuforia.TrackableBehaviour.Status,Vuforia.TrackableBehaviour.StatusInfo})">
+      <summary>
+            Unregister the Status change callback
+            </summary>
+      <param name="callback">
+      </param>
+    </member>
+    <member name="T:Vuforia.TurnOffBehaviour">
+      <summary>
+            A utility behaviour to disable rendering of a game object at run time.
+            </summary>
+    </member>
+    <member name="T:Vuforia.FusionProviderType">
+      <summary>
+             Used when calling setAllowedFusionProviders() and getActiveFusionProvider()
+            
+             Vuforia Fusion is a capability, introduced with Vuforia 7, that is designed to provide
+             the best possible AR experience on a wide range of devices. Fusion solves the problem
+             of fragmentation in AR-enabling technologies, including cameras, sensors, chipsets,
+             and software frameworks such as ARKit, ARCore and Windows Holographic. It senses the
+             capabilities of the underlying device and fuses them with Vuforia features, allowing
+             developers to rely on a single Vuforia API for an optimal AR experience.
+            
+             The FusionProviderType enums provide advanced developers with a way to
+             control which technologies Fusion will use. Developers using these APIs should
+             be aware:
+               - of the functionality provided by the underlying platforms
+               - of the technology involved in enabling AR
+               - of the robustness of the various options
+               - that features such as GroundPlane will cease to work. ModelTargets will
+                 operate in a less robust manner if VUFORIA_VISION_ONLY is selected.
+            
+             The enum values are bit-fields, except INVALID_OPERATION, to be combined using
+             using the 'or' operation, and passed to setAllowedFusionProviders().
+             </summary>
+    </member>
+    <member name="F:Vuforia.FusionProviderType.INVALID_OPERATION">
+      <summary>
+            An invalid call has been made
+            
+            This value is returned when making a call to any of the FusionProvider
+            functions at an invalid time. It should not be used as part of setting
+            the allowed Fusion provider.
+            </summary>
+    </member>
+    <member name="F:Vuforia.FusionProviderType.VUFORIA_VISION_ONLY">
+      <summary>
+            Vision based tracking only
+            
+            Please note that not all Vuforia features are supported when using this
+            provider. See setAllowedFusionProviders() for more information.
+            </summary>
+    </member>
+    <member name="F:Vuforia.FusionProviderType.VUFORIA_SENSOR_FUSION">
+      <summary>
+            Use the Vuforia provided sensor fusion.
+            
+            Vuforia will try to make use of camera and IMU information to create a
+            tracking experience that, when compared to VUFORIA_VISION_ONLY,
+            is more robust to erratic motions and featureless environments
+            </summary>
+    </member>
+    <member name="F:Vuforia.FusionProviderType.PLATFORM_SENSOR_FUSION">
+      <summary>
+             Use the Platform-provided technology for Fusion
+            
+             Vuforia will try to make use of tracking services offered by the underlying
+             platfrom. Examples of this include ARKit on iOS, ARCore on Android, or
+             Windows Holographic on UWP.
+             </summary>
+    </member>
+    <member name="F:Vuforia.FusionProviderType.ALL">
+      <summary>
+            Directs Fusion to automatically select the best provider
+            
+            This is the default and directy Vuforia to select the best technology
+            available on the current device for Vuforia Fusion.
+            </summary>
+    </member>
+    <member name="T:Vuforia.PIXEL_FORMAT">
+      <summary>
+            Pixel encoding types
+            </summary>
+    </member>
+    <member name="F:Vuforia.PIXEL_FORMAT.UNKNOWN_FORMAT">
+      <summary>
+            Unknown format - default pixel type for undefined images
+            </summary>
+    </member>
+    <member name="F:Vuforia.PIXEL_FORMAT.RGB565">
+      <summary>
+            A color pixel stored in 2 bytes using 5 bits for red,
+            6 bits for green and 5 bits for blue
+            </summary>
+    </member>
+    <member name="F:Vuforia.PIXEL_FORMAT.RGB888">
+      <summary>
+            A color pixel stored in 3 bytes using 8 bits each
+            </summary>
+    </member>
+    <member name="F:Vuforia.PIXEL_FORMAT.GRAYSCALE">
+      <summary>
+            A grayscale pixel stored in one byte
+            </summary>
+    </member>
+    <member name="F:Vuforia.PIXEL_FORMAT.RGBA8888">
+      <summary>
+            A color pixel stored in 4 bytes using 8 bits each
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageDescription.Width">
+      <summary>
+            The width of the image in pixels.
+            Note that the pixel buffer can be wider than this.
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageDescription.Height">
+      <summary>
+            The height of the image in pixels.
+            Note that the pixel buffer can be higher than this.
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageDescription.Stride">
+      <summary>
+            The number of bytes between the start of a pixel row and the start of the next
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageDescription.BufferWidth">
+      <summary>
+            The width (number of columns) of the underlying pixel buffer.
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageDescription.BufferHeight">
+      <summary>
+            The height (number of rows) of the underlying pixel buffer.
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageDescription.PixelFormat">
+      <summary>
+            The pixel format of the image
+            </summary>
+    </member>
+    <member name="T:Vuforia.BackgroundPlaneBehaviour">
+      <summary>
+            This Behaviour renders the video background from the camera in Unity.
+            </summary>
+    </member>
+    <member name="P:Vuforia.BackgroundPlaneBehaviour.NumDivisions">
+      <summary>
+            This property is used for configuring the size of video background mesh.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ObjectTargetBehaviour">
+      <summary>
+            This class serves both as an augmentation definition for a ObjectTarget in the editor
+            as well as a tracked ObjectTarget result at runtime
+            </summary>
+    </member>
+    <member name="P:Vuforia.ObjectTargetBehaviour.ObjectTarget">
+      <summary>
+            The ObjectTarget that this ObjectTargetBehaviour augments
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTargetBehaviour.SetBoundingBox(UnityEngine.Vector3,UnityEngine.Vector3)">
+      <summary>
+            Set the Bounding Box (only in editor mode).
+            </summary>
+      <param name="minBBox">bounding box min position</param>
+      <param name="maxBBox">bounding box max position</param>
+    </member>
+    <member name="M:Vuforia.ObjectTargetBehaviour.GetSize">
+      <summary>
+            Returns the size of this target in scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTargetBehaviour.SetLength(System.Single)">
+      <summary>
+            Set the length (x-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            </summary>
+      <param name="length">length value</param>
+    </member>
+    <member name="M:Vuforia.ObjectTargetBehaviour.SetWidth(System.Single)">
+      <summary>
+            Set the width (y-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            </summary>
+      <param name="width">width value</param>
+    </member>
+    <member name="M:Vuforia.ObjectTargetBehaviour.SetHeight(System.Single)">
+      <summary>
+            Set the height (z-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            </summary>
+      <param name="height">height value</param>
+    </member>
+    <member name="T:Vuforia.CameraDevice">
+      <summary>
+            This class provides access to camera methods and properties
+            </summary>
+    </member>
+    <member name="T:Vuforia.CameraDevice.CameraDeviceMode">
+      <summary>
+            The mode used for camera capturing and video rendering.
+            The camera device mode is set through the Unity inspector.
+            </summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.CameraDeviceMode.MODE_DEFAULT">
+      <summary>Best compromise between speed and quality.</summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.CameraDeviceMode.MODE_OPTIMIZE_SPEED">
+      <summary>Optimize for speed. Quality of the video background could suffer.</summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.CameraDeviceMode.MODE_OPTIMIZE_QUALITY">
+      <summary>Optimize for quality. Application performance could go down.</summary>
+    </member>
+    <member name="T:Vuforia.CameraDevice.FocusMode">
+      <summary>
+            The different focus modes for the active camera
+            </summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.FocusMode.FOCUS_MODE_NORMAL">
+      <summary>Default focus mode</summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.FocusMode.FOCUS_MODE_TRIGGERAUTO">
+      <summary>Triggers a single autofocus operation</summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO">
+      <summary>Continuous autofocus mode</summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.FocusMode.FOCUS_MODE_INFINITY">
+      <summary>Focus set to infinity</summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.FocusMode.FOCUS_MODE_MACRO">
+      <summary>Macro mode for close-up focus</summary>
+    </member>
+    <member name="T:Vuforia.CameraDevice.VideoModeData">
+      <summary>
+            This struct stores video mode data. This includes the width and height of
+            the frame and the framerate of the camera.
+            </summary>
+    </member>
+    <member name="T:Vuforia.CameraDevice.CameraField">
+      <summary>
+            Camera fields are advanced properties of the camera
+            
+            Camera fields represent advanced camera properties and capture parameters such as
+            exposure compensation, ISO and others. A field may be read only (e.g. maximum
+            exposure compensation value) or read-write (e.g. exposure compensation value).
+            
+            Camera fields are accessed as key-value pairs, where the value may be one of
+            multiple basic types.
+            
+            Camera fields are highly platform dependent and the keys to identify a given
+            property and available values to set will vary across operating system,
+            operating system version, camera API version and the device model itself.
+            Furthermore the behavior of the camera driver wrt. these fields is highly
+            ragmented. Thus CameraFields should only be used for specific use case and devices.
+            
+            All of the Camera field APIs shall be called only after initializing the
+            CameraDevice.
+            
+            Camera Fields are currently only implemented for Android.
+            
+            Finally setting advanced camera parameters may adversely affect Vuforia
+            tracking performance as well as cause functional issues.
+            </summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.DataType.TypeInt64">
+            Null terminated array of characters (Ascii)
+        </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.DataType.TypeFloat">
+            64 bit signed integer
+        </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.DataType.TypeBool">
+            Single precision floating point
+        </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.DataType.TypeInt64Range">
+            Boolean
+        </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.DataType.TypeUnknown">
+            Array of two 32 bit signed integer
+        </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.Type">
+      <summary>
+            The data type of this field
+            </summary>
+    </member>
+    <member name="F:Vuforia.CameraDevice.CameraField.Key">
+      <summary>
+            The key to identify this field
+            </summary>
+    </member>
+    <member name="T:Vuforia.CameraDevice.Int64Range">
+      <summary>
+            A struct describing a range of 64 bit integers with a lower and upper bound
+            </summary>
+    </member>
+    <member name="P:Vuforia.CameraDevice.Instance">
+      <summary>
+            Returns an instance of a CameraDevice (thread safe)
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.Init">
+      <summary>
+            Initializes the camera.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.Deinit">
+      <summary>
+            Deinitializes the camera.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.Start">
+      <summary>
+            Starts the camera. Frames are being delivered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.Stop">
+      <summary>
+            Stops the camera if video feed is not required
+            (e.g. in non-AR mode of an application).
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.IsActive">
+      <summary>
+            If the Camera has been started
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetVideoMode">
+      <summary>
+             Get the video mode data that matches the selected CameraDeviceMode.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetVideoMode(Vuforia.CameraDevice.CameraDeviceMode)">
+      <summary>
+             Get the video mode data that matches the given CameraDeviceMode.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SelectVideoMode(Vuforia.CameraDevice.CameraDeviceMode)">
+      <summary>
+            Chooses a video mode out of the list of modes.
+            This function can be only called after the camera device has been
+            initialized but not started yet. Once you have started the camera and
+            you need the select another video mode, you need to Stop(), Deinit(),
+            then Init() the camera before calling SelectVideoMode() again.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetSelectedVideoMode(Vuforia.CameraDevice.CameraDeviceMode@)">
+      <summary>
+            Can be used to query a previously set camera device mode.
+            Will return false if the mode has not been set yet.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetFlashTorchMode(System.Boolean)">
+      <summary>
+            Activate or deactivate the camera device flash.
+            Returns false if flash is not available or can't be activated.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetFocusMode(Vuforia.CameraDevice.FocusMode)">
+      <summary>
+            Set the active focus mode.
+            Returns false if this mode is not available or can't be activated.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetFrameFormat(Vuforia.PIXEL_FORMAT,System.Boolean)">
+      <summary>
+             Enables or disables the request of the camera image in the desired pixel
+            format. Returns true on success, false otherwise. Note that this may
+            result in processing overhead. Image are accessed using GetCameraImage.
+            Note that there may be a delay of several frames until the camera image
+            becomes availables.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetCameraImage(Vuforia.PIXEL_FORMAT)">
+      <summary>
+            Returns a camera images for the requested format. Returns null if
+            this image is not available. You must call SetFrameFormat before
+            accessing the corresponding camera image.
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetCameraFieldOfViewRads">
+      <summary>
+            Get the field of view for the active camera.
+            This is a Vector2 containing the x- and y- components of the FOV in radians.
+            If the value cannot be obtained for some reason, then Vector2.zero will be returned
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetCameraFields">
+      <summary>
+            Get available camera fields
+            Note: this may not be the complete set of camera fields available on this
+            device and some keys may not be supported on every device
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetField(System.String,System.String)">
+      <summary>
+            Write accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetField(System.String,System.Int64)">
+      <summary>
+            Write accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetField(System.String,System.Single)">
+      <summary>
+            Write accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetField(System.String,System.Boolean)">
+      <summary>
+            Write accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.SetField(System.String,Vuforia.CameraDevice.Int64Range)">
+      <summary>
+            Write accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetField(System.String,System.String@)">
+      <summary>
+            Read accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetField(System.String,System.Int64@)">
+      <summary>
+            Read accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetField(System.String,System.Single@)">
+      <summary>
+            Read accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetField(System.String,System.Boolean@)">
+      <summary>
+            Read accessors for camera fields
+            </summary>
+    </member>
+    <member name="M:Vuforia.CameraDevice.GetField(System.String,Vuforia.CameraDevice.Int64Range@)">
+      <summary>
+            Read accessors for camera fields
+            </summary>
+    </member>
+    <member name="T:Vuforia.CloudRecoBehaviour">
+      <summary>
+            This is the main behaviour class that encapsulates cloud recognition behaviour.
+            It just has to be added to a Vuforia-enabled Unity scene and will initialize the target finder and wait for new results.
+            State changes and new results will be sent to registered ICloudRecoEventHandlers
+            </summary>
+    </member>
+    <member name="P:Vuforia.CloudRecoBehaviour.CloudRecoEnabled">
+      <summary>
+            Whether cloud has been enabled in the menu
+            </summary>
+    </member>
+    <member name="P:Vuforia.CloudRecoBehaviour.CloudRecoInitialized">
+      <summary>
+            Whether cloud reco has been initialized yet.
+            </summary>
+    </member>
+    <member name="T:Vuforia.Device">
+      <summary>
+            Vuforia abstract representation of the Device (hardware) that it is running on.
+            </summary>
+      <remarks>
+            This class provides for the management of the viewer that Vuforia will
+            create RenderingPrimitives for. A viewer is hardware worn by the user for
+            example a VR enclosure for a mobile phone or a dedicated eyewear device.
+            </remarks>
+    </member>
+    <member name="P:Vuforia.Device.Instance">
+      <summary>
+            Returns the singleton instance of a Device (thread safe).
+            An EyewearDevice is returned if Vuforia is running on a dedicated eyewear device.
+            </summary>
+    </member>
+    <member name="T:Vuforia.Image">
+      <summary>
+            Representation of an image, typically returned by the CameraDevice.
+            </summary>
+            The image's pixel buffer may have a different size than expected based on the
+            values of Width and Height. 
+        </member>
+    <member name="M:Vuforia.Image.Resize(Vuforia.ImageDescription)">
+      <summary>
+            Resizing an image deletes any existing image data
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.Width">
+      <summary>
+            The width of the image in pixels.
+            Note that the pixel buffer can be wider than this.
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.Height">
+      <summary>
+            The height of the image in pixels.
+            Note that the pixel buffer can be higher than this.
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.Stride">
+      <summary>
+            The number of bytes between the start of a pixel row and the start of the next
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.BufferWidth">
+      <summary>
+            The width (number of columns) of the underlying pixel buffer.
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.BufferHeight">
+      <summary>
+            The height (number of rows) of the underlying pixel buffer.
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.PixelFormat">
+      <summary>
+            The pixel format of the image
+            </summary>
+    </member>
+    <member name="P:Vuforia.Image.Pixels">
+      <summary>
+            Get pixel data of the image
+            </summary>
+    </member>
+    <member name="M:Vuforia.Image.IsValid">
+      <summary>
+            Returns true if this image is not zero-sized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.Image.CopyBufferToTexture(UnityEngine.Texture2D)">
+      <summary>
+            The whole buffer (i.e. BufferWidth x BufferHeight) is copied to the texture.
+            Width, height and format of texture will be updated to fit the input image.
+            </summary>
+    </member>
+    <member name="M:Vuforia.Image.CopyToTexture(UnityEngine.Texture2D)">
+      <summary>
+            Copies the image into the given texture.
+            Width and height of texture will be updated to fit the input image. The image data
+            is converted to the format of the texture. Only grayscale, RGB24 and RGBA32 are supported.
+            Only the image portion defined by Width and Height is copied to the texture, not the whole buffer.
+            </summary>
+    </member>
+    <member name="M:Vuforia.Image.CopyToTexture(UnityEngine.Texture2D,System.Boolean)">
+      <summary>
+            Copies the image into the given texture.
+            Width and height of texture will be updated to fit the input image. The image data
+            is converted to the format of the texture. Only grayscale, RGB24 and RGBA32 are supported.
+            Only the image portion defined by Width and Height is copied to the texture, not the whole buffer.
+            </summary>
+      <param name="texture2D">output texture</param>
+      <param name="flipY">whether the image should be flipped in y-direction</param>
+    </member>
+    <member name="P:Vuforia.VuforiaBehaviour.Instance">
+      <summary>
+            A simple static singleton getter to the VuforiaBehaviour (if present in the scene)
+            Will return null if no VuforiaBehaviour has been instantiated in the scene.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaConfiguration">
+      <summary>
+            Global settings for Vuforia which are used for all scenes
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.LicenseKey">
+      <summary>
+            The license key can only be changed before the first scene is loaded,
+            e.g. with the RuntimeInitializeOnLoadMethod-attribute
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.DelayedInitialization">
+      <summary>
+            If delayed initialization is enabled, the developer has to initialize Vuforia
+            manually with <see cref="M:Vuforia.VuforiaRuntime.InitVuforia" />.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.CameraDeviceMode">
+      <summary>
+            The mode used for camera capturing and video rendering.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.MaxSimultaneousImageTargets">
+      <summary>
+            How many targets to detect and track at the same time
+            </summary>
+            This setting affects image, cylinder and multi targets
+        </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.MaxSimultaneousObjectTargets">
+      <summary>
+            How many object targets to detect and track at the same time
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.UseDelayedLoadingObjectTargets">
+      <summary>
+            Loading for object target datasets can be delayed upon first detection
+            This setting tells the tracker to enable/disable delayed loading 
+            of object target datasets upon first detection. 
+            Loading time of large object dataset will be reduced 
+            but the initial detection time of targets will increase.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.GenericVuforiaConfiguration.Version">
+      <summary>
+            Version of the Vuforia Unity Extension
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.VideoBackgroundConfiguration.VideoBackgroundEnabled">
+      <summary>
+            Enable or disable rendering the video background
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.TrackerConfiguration.AutoInitAndStartTracker">
+      <summary>
+            Whether the tracker is automatically initialized and started
+            in a new scene
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.DeviceTrackerConfiguration.ARCoreRequirementSetting">
+      <summary>
+            Controls ARCore support setting in the Android Manifest of the app, see:
+            https://developers.google.com/ar/develop/java/enable-arcore
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaConfiguration.Instance">
+      <summary>
+            Get singleton-instance at runtime
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaMonoBehaviour">
+      <summary>
+            This is the base class for all MonoBehaviours that are used in Vuforia.
+            If no Behaviours of this type are found in a scene, the VuforiaBehaviour will not be
+            automatically attached at runtime. This means no VideoBackground is rendered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntime.InitPlatform(Vuforia.IUnityPlayer)">
+      <summary>
+            Initialize correct platform-specific player
+            </summary>
+      <param name="player">This needs to be the correct player for the current platform</param>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntime.InitVuforia">
+      <summary>
+            Initialize Vuforia. This has to be called after InitPlatform
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntime.Deinit">
+      <summary>
+            Deinitialize Vuforia when application is quit.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntime.RegisterVuforiaInitErrorCallback(System.Action{Vuforia.VuforiaUnity.InitError})">
+      <summary>
+            Register for a callback that is invoked if Vuforia initialization fails.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntime.UnregisterVuforiaInitErrorCallback(System.Action{Vuforia.VuforiaUnity.InitError})">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaRuntime.InitializationState">
+      <summary>
+            Returns whether Vuforia has been initialized
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuMarkBehaviour">
+      <summary>
+            This class serves both as an augmentation definition for a VuMark template in the editor
+            as well as a tracked VuMark result at runtime
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkBehaviour.VuMarkTemplate">
+      <summary>
+            VuMark-template is available at runtime independent whether
+            this behaviour is currently tracked or not
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkBehaviour.VuMarkTarget">
+      <summary>
+            VuMark-target is only available while this behaviour is tracked
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkBehaviour.Origin">
+      <summary>
+            Get origin of pose. The origin is (0,0) if the instance image is centered
+            around the origin.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.GetSize">
+      <summary>
+            Returns the size of this target in scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.SetWidth(System.Single)">
+      <summary>
+            Set the width (x-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            The dataset has to be deactivated before changing the size.
+            Make sure to set the same size for all instantiated behaviours
+            of the same VuMark-template
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.SetHeight(System.Single)">
+      <summary>
+            Set the height (y-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            The dataset has to be deactivated before changing the size.
+            Make sure to set the same size for all instantiated behaviours
+            of the same VuMark-template
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.RegisterVuMarkTargetAssignedCallback(System.Action)">
+      <summary>
+            Register callback which is invoked whenever a new VuMark-target is assigned to this behaviour
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.UnregisterVuMarkTargetAssignedCallback(System.Action)">
+      <summary>
+            Unregister callback
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.RegisterVuMarkTargetLostCallback(System.Action)">
+      <summary>
+            Register callback which is invoked whenever a VuMark-target is removed from the behaviour, i.e. it is not tracked anymore
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkBehaviour.UnregisterVuMarkTargetLostCallback(System.Action)">
+      <summary>
+            Unregister callback
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuMarkManager">
+      <summary>
+            This class manages all VuMark-targets which are created at runtime
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.GetActiveVuMarks">
+      <summary>
+            Returns all currently tracked VuMark-targets
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.GetActiveBehaviours(Vuforia.VuMarkTarget)">
+      <summary>
+            Get the VuMark-behaviour that is associated with a currently tracked VuMark
+            </summary>
+      <param name="vuMark">trackable</param>
+      <returns>resulting VuMark behaviours, might be empty if specified VuMark is not associated to a behaviour</returns>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.GetActiveBehaviours">
+      <summary>
+            Returns all currently tracked VuMark behaviours
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.GetAllBehaviours">
+      <summary>
+            Returns all instantiated VuMark behaviours, even those that are currently
+            not associated with a VuMark-target and not tracked
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.RegisterVuMarkDetectedCallback(System.Action{Vuforia.VuMarkTarget})">
+      <summary>
+            Register a callback which is invoked whenever a VuMark-target is newly detected which was not tracked in the frame before
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.UnregisterVuMarkDetectedCallback(System.Action{Vuforia.VuMarkTarget})">
+      <summary>
+            Unregister callback for newly detected VuMark-targets
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.RegisterVuMarkLostCallback(System.Action{Vuforia.VuMarkTarget})">
+      <summary>
+            Register a callback which is invoked whenever all instances of a VuMark-target are lost and it is not tracked anymore
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.UnregisterVuMarkLostCallback(System.Action{Vuforia.VuMarkTarget})">
+      <summary>
+            Unregister callback for lost VuMark-targets
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.RegisterVuMarkBehaviourDetectedCallback(System.Action{Vuforia.VuMarkBehaviour})">
+      <summary>
+            Register a callback which is invoked whenever a VuMark-result is newly detected which was not tracked in the frame before
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuMarkManager.UnregisterVuMarkBehaviourDetectedCallback(System.Action{Vuforia.VuMarkBehaviour})">
+      <summary>
+            Unregister callback for newly detected VuMark-results
+            </summary>
+    </member>
+    <member name="F:Vuforia.InstanceIdType.BYTES">
+      <summary>
+            Generic byte data, stored in little-endian order in the buffer.
+            For example, and ID of 0x123456 would appear as { 0x56, 0x34, 0x12 }
+            </summary>
+    </member>
+    <member name="F:Vuforia.InstanceIdType.STRING">
+      <summary>
+            Printable ASCII string data.
+            </summary>
+    </member>
+    <member name="F:Vuforia.InstanceIdType.NUMERIC">
+      <summary>
+            Numeric data, no larger than a 64 bit unsigned long long.
+            </summary>
+    </member>
+    <member name="T:Vuforia.InstanceId">
+      <summary>
+            The InstanceId contains the id for a particular VuMark.
+            </summary>
+    </member>
+    <member name="P:Vuforia.InstanceId.DataType">
+      <summary>
+            The type of data the InstanceId contains.
+            </summary>
+    </member>
+    <member name="P:Vuforia.InstanceId.Buffer">
+      <summary>
+            The raw byte buffer ID data.
+            </summary>
+    </member>
+    <member name="P:Vuforia.InstanceId.HexStringValue">
+      <summary>
+            TEMP: Helper method for displaying the instance ID.
+            </summary>
+    </member>
+    <member name="P:Vuforia.InstanceId.StringValue">
+      <summary>
+            Returns the byte buffer interpreted as an ASCII string if the datatype
+            is marked as a STRING, an empty string otherwise.
+            </summary>
+    </member>
+    <member name="P:Vuforia.InstanceId.NumericValue">
+      <summary>
+            Returns the byte buffer as a 64bit unsigned long if the data type is
+            marked as a NUMBER. 0 is returned otherwise.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuMarkTarget">
+      <summary>
+            The VuMarkTarget contains all data for a VuMark which is available upon
+            detection. This data does not change while the VuMark is tracked.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkTarget.InstanceId">
+      <summary>
+            Returns the instance ID for the detected VuMark
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkTarget.Template">
+      <summary>
+            Returns the template that this VuMark is based on.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkTarget.InstanceImage">
+      <summary>
+            Returns the generated image of the detected VuMark.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuMarkTemplate">
+      <summary>
+            The VuMarkTemplate contains all static data of a VuMark which
+            is available from the dataset.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkTemplate.VuMarkUserData">
+      <summary>
+            Gets the user data associated with this template that comes from 
+            the dataset.  If there is no VuMark use data associated with this 
+            template, an empty string is returned.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkTemplate.Origin">
+      <summary>
+            Returns the size-scaled origin of the VuMark
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuMarkTemplate.TrackingFromRuntimeAppearance">
+      <summary>
+            Sets or gets whether the VuMark has a changing background per instance, signaling
+            to SDK how to track it. 
+            </summary>
+            Setting TrackingFromRuntimeAppearance to true indicates that the SDK 
+            should track this type of VuMark based on what is seen by the camera and 
+            not assume the template background image is useful for tracking because 
+            the background can change per instance. 
+            Setting TrackingFromRuntimeAppearance to false indicates that the SDK
+            should track this type of VuMark based on VuMark Template used to create 
+            the dataset. This is the default behavior.
+        </member>
+    <member name="T:Vuforia.WorldCenterTrackableBehaviour">
+      <summary>
+            This interface represents a TrackableBehaviour that can be set as the world center trackable
+            </summary>
+    </member>
+    <member name="P:Vuforia.WorldCenterTrackableBehaviour.Trackable">
+      <summary>
+            The Trackable created at runtime that is augmented by this TrackableBehaviour
+            </summary>
+    </member>
+    <member name="T:Vuforia.CylinderTarget">
+      <summary>
+            A trackable that represents a cylinder or conical object
+            </summary>
+    </member>
+    <member name="M:Vuforia.CylinderTarget.GetSideLength">
+      <summary>
+            Returns the side length (or slanted height) of the cylinder target in 3D scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.CylinderTarget.GetTopDiameter">
+      <summary>
+            Returns the top diameter of the cylinder target in 3D scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.CylinderTarget.GetBottomDiameter">
+      <summary>
+            Returns the bottom diameter of the cylinder target in 3D scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.CylinderTarget.SetSideLength(System.Single)">
+      <summary>
+            Define a new side length of the cylinder target.
+            This will uniformly scale the cylinder and thus also update top and bottom diameter.
+            This is only allowed when the dataset is not active!
+            </summary>
+    </member>
+    <member name="M:Vuforia.CylinderTarget.SetTopDiameter(System.Single)">
+      <summary>
+            Define a new top diameter of the cylinder target.
+            This will uniformly scale the cylinder and thus also update side length and bottom diameter.
+            This is only allowed when the dataset is not active!
+            </summary>
+    </member>
+    <member name="M:Vuforia.CylinderTarget.SetBottomDiameter(System.Single)">
+      <summary>
+            Define a new bottom diameter of the cylinder target.
+            This will uniformly scale the cylinder and thus also update side length and top diameter.
+            This is only allowed when the dataset is not active!
+            </summary>
+    </member>
+    <member name="T:Vuforia.CylinderTargetBehaviour">
+      <summary>
+            This class serves both as an augmentation definition for a CylinderTarget in the editor
+            as well as a tracked CylinderTarget result at runtime
+            </summary>
+    </member>
+    <member name="P:Vuforia.CylinderTargetBehaviour.CylinderTarget">
+      <summary>
+            The CylinderTarget that this CylinderTargetBehaviour augments
+            </summary>
+    </member>
+    <member name="P:Vuforia.CylinderTargetBehaviour.SideLength">
+      <summary>
+            Get or set the sidelength (slanted height). Changing this value uniformly scales the target.
+            </summary>
+    </member>
+    <member name="P:Vuforia.CylinderTargetBehaviour.TopDiameter">
+      <summary>
+            Get or set the top diameter. Changing this value uniformly scales the target.
+            </summary>
+    </member>
+    <member name="P:Vuforia.CylinderTargetBehaviour.BottomDiameter">
+      <summary>
+            Get or set the bottom diameter. Changing this value uniformly scales the target.
+            </summary>
+    </member>
+    <member name="T:Vuforia.DataSet">
+      <summary>
+            This class represents a dataset that can be loaded and holds a collection of trackables.
+            Trackables can also be created and destroyed at runtime.
+            </summary>
+    </member>
+    <member name="T:Vuforia.DataSet.StorageType">
+      <summary>
+            Storage type is used to interpret a given path string.
+            </summary>
+    </member>
+    <member name="F:Vuforia.DataSet.StorageType.STORAGE_APP">
+      <summary>Indicates a relative path to an app local storage location.</summary>
+    </member>
+    <member name="F:Vuforia.DataSet.StorageType.STORAGE_APPRESOURCE">
+      <summary>Indicates a relative path to a resource bundled with the application.</summary>
+    </member>
+    <member name="F:Vuforia.DataSet.StorageType.STORAGE_ABSOLUTE">
+      <summary>Indicates an absolute path.</summary>
+    </member>
+    <member name="P:Vuforia.DataSet.Path">
+      <summary>
+            Returns the path to the data set.
+            </summary>
+    </member>
+    <member name="P:Vuforia.DataSet.FileStorageType">
+      <summary>
+            Returns the storage type of the data set.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.Exists(System.String)">
+      <summary>
+            Checks if a data set exists at the default "StreamingAssets/Vuforia" directory
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.Exists(System.String,Vuforia.VuforiaUnity.StorageType)">
+      <summary>
+            Checks if a data set exists at the given path.
+            Storage type is used to correctly interpret the given path.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.Load(System.String)">
+      <summary>
+            Loads a data set from the default "StreamingAssets/Vuforia" directory.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.Load(System.String,Vuforia.VuforiaUnity.StorageType)">
+      <summary>
+            Loads data set from the given path.
+            Storage type is used to correctly interpret the given path.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.GetTrackables">
+      <summary>
+            Returns the trackables that are defined in the data set.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.CreateTrackable(Vuforia.TrackableSource,System.String)">
+      <summary>
+            Creates a new trackable behaviour attached to a new gameobject with the given name and adds it to this dataset
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.CreateTrackable(Vuforia.TrackableSource,UnityEngine.GameObject)">
+      <summary>
+            Adds a single trackable from a source and a given gameobject to this dataset
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.Destroy(Vuforia.Trackable,System.Boolean)">
+      <summary>
+            This method must not be called while the dataset is active or it will return false.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.HasReachedTrackableLimit">
+      <summary>
+            Checks if this DataSet's Trackable capacity is reached.
+            Returns true if the number of Trackables created in this DataSet
+            has reached the maximum capacity, false otherwise.
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.Contains(Vuforia.Trackable)">
+      <summary>
+            Checks if the given trackable is contained in the DataSet
+            </summary>
+    </member>
+    <member name="M:Vuforia.DataSet.DestroyAllTrackables(System.Boolean)">
+      <summary>
+            Destroys all existing trackables
+            </summary>
+    </member>
+    <member name="T:Vuforia.DatabaseLoadARController">
+      <summary>
+            This behaviour allows to automatically load and activate one or more DataSet on startup
+            </summary>
+    </member>
+    <member name="M:Vuforia.DatabaseLoadARController.LoadDatasets">
+      <summary>
+            Load Datasets is automatically called by VuforiaARController after Vuforia has been initialized correctly
+            </summary>
+    </member>
+    <member name="M:Vuforia.DatabaseLoadARController.AddExternalDatasetSearchDir(System.String)">
+      <summary>
+            Add an external path to search for datasets, useful when loading datasets from another location or using Android's OBB feature
+            </summary>
+    </member>
+    <member name="T:Vuforia.DataSetTrackableBehaviour">
+      <summary>
+            This is the base class for all trackables that are part of a dataset
+            </summary>
+    </member>
+    <member name="T:Vuforia.ObjectTargetData">
+      <summary>
+            The basic data struct for an Object Target.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ObjectTarget">
+      <summary>
+            A trackable that represents a ObjectTarget object
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTarget.GetSize">
+      <summary>
+            Returns the size  of the target (in 3D scene units).
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTarget.GetLargestSizeComponent">
+      <summary>
+            Returns the largets component of the target size.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTarget.SetSize(UnityEngine.Vector3)">
+      <summary>
+            Sets the size of the target (in 3D scene units).
+            This is only allowed when the dataset is not active!
+            </summary>
+    </member>
+    <member name="T:Vuforia.RectangleData">
+      <summary>
+            This struct defines the 2D coordinates of a rectangle. 
+            The struct is internally used for setting Virtual Buttons or getting bounding boxes of letters.
+            </summary>
+    </member>
+    <member name="T:Vuforia.RectangleIntData">
+      <summary>
+            This struct defines the 2D coordinates of a rectangle using integers. 
+            The struct is internally used for querying the region of interest for text tracking.
+            </summary>
+    </member>
+    <member name="T:Vuforia.OrientedBoundingBox">
+      <summary>
+            This struct defines an oriented rectangle.
+            It is internally used for defining the oriented bounding box of two trackables
+            </summary>
+    </member>
+    <member name="P:Vuforia.OrientedBoundingBox.Center">
+      <summary>
+            Get the center of the box
+            </summary>
+    </member>
+    <member name="P:Vuforia.OrientedBoundingBox.HalfExtents">
+      <summary>
+            Get half width and height of the box
+            </summary>
+    </member>
+    <member name="P:Vuforia.OrientedBoundingBox.Rotation">
+      <summary>
+            Get the counter clock wise rotation of the box in degrees
+            with respect to the x axis
+            </summary>
+    </member>
+    <member name="T:Vuforia.OrientedBoundingBox3D">
+      <summary>
+            This struct defines a 3D box oriented around the Y axis.
+            It is internally used for defining the oriented bounding box of tword trackables
+            </summary>
+    </member>
+    <member name="P:Vuforia.OrientedBoundingBox3D.Center">
+      <summary>
+            Get the center of the box
+            </summary>
+    </member>
+    <member name="P:Vuforia.OrientedBoundingBox3D.HalfExtents">
+      <summary>
+            Get half width and height of the box
+            </summary>
+    </member>
+    <member name="P:Vuforia.OrientedBoundingBox3D.RotationY">
+      <summary>
+            Get the counter clock wise rotation of the box in degrees
+            with respect to the x axis
+            </summary>
+    </member>
+    <member name="T:Vuforia.IObjectRecoEventHandler">
+      <summary>
+            An interface for handling reco events.
+            </summary>
+    </member>
+    <member name="M:Vuforia.IObjectRecoEventHandler.OnInitialized(Vuforia.TargetFinder)">
+      <summary>
+            called when the RecoBehaviour has finished initializing
+            </summary>
+    </member>
+    <member name="M:Vuforia.IObjectRecoEventHandler.OnInitError(Vuforia.TargetFinder.InitState)">
+      <summary>
+            called when an error is reported during initialization
+            </summary>
+    </member>
+    <member name="M:Vuforia.IObjectRecoEventHandler.OnUpdateError(Vuforia.TargetFinder.UpdateState)">
+      <summary>
+            called when an error is reported while updating
+            </summary>
+    </member>
+    <member name="M:Vuforia.IObjectRecoEventHandler.OnStateChanged(System.Boolean)">
+      <summary>
+            called when the RecoBehaviour starts or stops scanning
+            </summary>
+    </member>
+    <member name="M:Vuforia.IObjectRecoEventHandler.OnNewSearchResult(Vuforia.TargetFinder.TargetSearchResult)">
+      <summary>
+            called when a new search result is found
+            </summary>
+    </member>
+    <member name="T:Vuforia.IUnityPlayer">
+      <summary>
+            This class encapsulates functionality to detect various surface events
+            (size, orientation changed) and delegate this to native.
+            These are used by Unity Extension code and should usually not be called by app code.
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.LoadNativeLibraries">
+      <summary>
+            Loads native plugin libraries on platforms where this is explicitly required.
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.InitializePlatform">
+      <summary>
+            Initialized platform specific settings
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.SetInitParameters(System.String)">
+      <summary>
+            Sets the initialization parameters required for Vuforia initialization
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.ContinueInit">
+      <summary>
+            Continues initialization until complete or error code returned
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.ResetPlatformCoordinateSystem">
+      <summary>
+            Resets platform specific coordinate systems (if any)
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.Update">
+      <summary>
+            Called from Update, checks for various life cycle events that need to be forwarded
+            to Vuforia Engine, e.g. orientation changes
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.OnPause">
+      <summary>
+            Pauses Vuforia
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.OnResume">
+      <summary>
+            Resumes Vuforia
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUnityPlayer.OnDestroy">
+      <summary>
+            Deinitializes Vuforia
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTargetType">
+      <summary>
+            The type of an ImageTarget. An ImageTarget can be predefined in a dataset,
+            created at runtime as a user defined target, or fetched at runtime via
+            cloud recognition
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTargetData">
+      <summary>
+            The basic data struct for an ImageTarget
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTarget">
+      <summary>
+            A trackable behaviour to represent a flat natural feature target.
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageTarget.ImageTargetType">
+      <summary>
+            The type of this ImageTarget (Predefined, User Defined, Cloud Reco)
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTarget.CreateVirtualButton(System.String,Vuforia.RectangleData)">
+      <summary>
+            Creates a new virtual button and adds it to the ImageTarget
+            Returns NULL if the corresponding DataSet is currently active.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTarget.GetVirtualButtonByName(System.String)">
+      <summary>
+            Returns a virtual button by its name
+            Returns NULL if no virtual button with that name
+            exists in this ImageTarget
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTarget.GetVirtualButtons">
+      <summary>
+             Returns the virtual buttons that are defined for this imageTarget
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTarget.DestroyVirtualButton(Vuforia.VirtualButton)">
+      <summary>
+            Removes and destroys one of the ImageTarget's virtual buttons
+            Returns false if the corresponding DataSet is currently active.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTargetBuilder">
+      <summary>
+            This class encapsulates all functionality needed to create a user defined target on the fly.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTargetBuilder.FrameQuality">
+      <summary>
+            The frame quality is used to determine if the current frame can be used to create a good target
+            </summary>
+    </member>
+    <member name="F:Vuforia.ImageTargetBuilder.FrameQuality.FRAME_QUALITY_NONE">
+      <summary>
+            getFrameQuality was called oustside of scanning mode
+            </summary>
+    </member>
+    <member name="F:Vuforia.ImageTargetBuilder.FrameQuality.FRAME_QUALITY_LOW">
+      <summary>
+            Poor number of features for tracking
+            </summary>
+    </member>
+    <member name="F:Vuforia.ImageTargetBuilder.FrameQuality.FRAME_QUALITY_MEDIUM">
+      <summary>
+            Sufficient number features for tracking
+            </summary>
+    </member>
+    <member name="F:Vuforia.ImageTargetBuilder.FrameQuality.FRAME_QUALITY_HIGH">
+      <summary>
+            Ideal number of features for tracking
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBuilder.Build(System.String,System.Single)">
+      <summary>
+            Build an Image Target Trackable source from the next available camera frame 
+            
+            Build an Image Target Trackable Source from the next available camera frame.
+            This is an asynchronous process, the result of which will be available from
+            getTrackableSource()
+            
+            This method will return true if the build was successfully started, and false
+            if an invalid name or screenSizeWidth is provided.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBuilder.StartScan">
+      <summary>
+            Start the scanning mode, allowing calls to getFrameQuality()
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBuilder.StopScan">
+      <summary>
+            Stop the scanning mode, getFrameQuality will return FRAME_QUALITY_NONE until
+            startScan is called again.  Stopping scan mode will reduce the overall system
+            utilization when not building ImageTargets.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBuilder.GetFrameQuality">
+      <summary>
+            Get frame quality, available after startScan is called.
+            
+            Will return the frame quality for the last available camera frame, a value
+            of FRAME_QUALITY_NONE will be returned if the scanning mode was not enabled.
+            via the startScan() method.
+            
+            This methods makes a marshalling call into native, so buffer the result
+            instead of calling it multiple times a frame for better performance.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBuilder.GetTrackableSource">
+      <summary>
+            Returns a trackable source object to be used in adding a new target to a dataset
+            
+            This method will return a TrackableSource to be provided to the DataSet.  This 
+            API will return NULL until a trackable source is available.  This trackable
+            source will be provided via this api until build() is called again, at which
+            point it will return NULL again until a successful build step has occured.
+            
+            This methods makes a marshalling call into native, so buffer the result
+            instead of calling it multiple times a frame for better performance.
+            </summary>
+    </member>
+    <member name="T:Vuforia.IUserDefinedTargetEventHandler">
+      <summary>
+            An interface for handling User Defined Target building events.
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUserDefinedTargetEventHandler.OnInitialized">
+      <summary>
+            called when the UserDefinedTargetBehaviour has been initialized
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUserDefinedTargetEventHandler.OnFrameQualityChanged(Vuforia.ImageTargetBuilder.FrameQuality)">
+      <summary>
+            called when the UserDefinedTargetBehaviour reports a new frame Quality
+            </summary>
+    </member>
+    <member name="M:Vuforia.IUserDefinedTargetEventHandler.OnNewTrackableSource(Vuforia.TrackableSource)">
+      <summary>
+            called when an error is reported during initialization
+            </summary>
+    </member>
+    <member name="T:Vuforia.IVideoBackgroundEventHandler">
+      <summary>
+            Interface for handling events regarding the video background
+            </summary>
+    </member>
+    <member name="M:Vuforia.IVideoBackgroundEventHandler.OnVideoBackgroundConfigChanged">
+      <summary>
+            Called after the video background config has been changed
+            </summary>
+    </member>
+    <member name="T:Vuforia.StateManager">
+      <summary>
+            This class is used to manage the state of all TrackableBehaviours, create them,
+            associate them with Trackables, update their pose, etc.
+            </summary>
+    </member>
+    <member name="M:Vuforia.StateManager.GetActiveTrackableBehaviours">
+      <summary>
+            Returns the TrackableBehaviours currently being tracked
+            </summary>
+    </member>
+    <member name="M:Vuforia.StateManager.GetTrackableBehaviours">
+      <summary>
+            Returns all currently instantiated TrackableBehaviours
+            </summary>
+    </member>
+    <member name="M:Vuforia.StateManager.DestroyTrackableBehavioursForTrackable(Vuforia.Trackable,System.Boolean)">
+      <summary>
+            Destroys all the TrackableBehaviours for the given Trackable
+            </summary>
+    </member>
+    <member name="M:Vuforia.StateManager.ReassociateTrackables">
+      <summary>
+            Removes destroyed behaviours from trackable list and associates newly created behaviours 
+            with trackables
+            </summary>
+            This affects all types of trackables, including VuMarks
+        </member>
+    <member name="M:Vuforia.StateManager.GetVuMarkManager">
+      <summary>
+            Returns the VuMark manager instance that can be used to access
+            all available VuMark-templates and all currently tracked VuMarks.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Vuforia.StateManager.GetIlluminationManager">
+      <summary>
+            Returns the IlluminationManager which provides data
+            on estimated illumination of the current frame
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:Vuforia.ITrackableEventHandler">
+      <summary>
+            Interface for handling trackable state changes.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ITrackableEventHandler.OnTrackableStateChanged(Vuforia.TrackableBehaviour.Status,Vuforia.TrackableBehaviour.Status)">
+      <summary>
+            Called when the trackable state has changed.
+            </summary>
+    </member>
+    <member name="T:Vuforia.IVirtualButtonEventHandler">
+      <summary>
+            An interface for handling virtual button state changes.
+            </summary>
+    </member>
+    <member name="M:Vuforia.IVirtualButtonEventHandler.OnButtonPressed(Vuforia.VirtualButtonBehaviour)">
+      <summary>
+            Called when the virtual button has just been pressed.
+            </summary>
+    </member>
+    <member name="M:Vuforia.IVirtualButtonEventHandler.OnButtonReleased(Vuforia.VirtualButtonBehaviour)">
+      <summary>
+            Called when the virtual button has just been released.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ImageTargetBehaviour">
+      <summary>
+            This class serves both as an augmentation definition for an ImageTarget in the editor
+            as well as a tracked image target result at runtime
+            </summary>
+    </member>
+    <member name="P:Vuforia.ImageTargetBehaviour.ImageTarget">
+      <summary>
+            The image target that this ImageTargetBehaviour augments
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.CreateVirtualButton(System.String,UnityEngine.Vector2,UnityEngine.Vector2)">
+      <summary>
+            This method creates a Virtual Button and adds it to this Image Target as
+            a direct child.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.CreateVirtualButton(System.String,UnityEngine.Vector2,UnityEngine.GameObject)">
+      <summary>
+            This methods adds the Virtual Button as a child of "immediateParent".
+            Returns null if "immediateParent" is not an Image Target or a child of an
+            Image Target.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.GetVirtualButtonBehaviours">
+      <summary>
+             Returns the virtual button behaviours for this imageTargetBehaviour
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.DestroyVirtualButton(System.String)">
+      <summary>
+            Destroys the virtual button with the given name.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.GetSize">
+      <summary>
+            Returns the size of this target in scene units
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.SetWidth(System.Single)">
+      <summary>
+            Set the width (x-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            The dataset of this target has to be deactivated before setting the size.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ImageTargetBehaviour.SetHeight(System.Single)">
+      <summary>
+            Set the height (y-dimension) of the target in scene units.
+            This will scale the target uniformly.
+            The dataset of this target has to be deactivated before setting the size.
+            </summary>
+    </member>
+    <member name="T:Vuforia.ObjectTracker">
+      <summary>
+            The ObjectTracker encapsulates methods to manage DataSets and provides access to
+            the ImageTargetBuilder and TargetFinder classes
+            </summary>
+    </member>
+    <member name="P:Vuforia.ObjectTracker.ImageTargetBuilder">
+      <summary>
+            exposes the ImageTargetBuilder member to other classes
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.CreateDataSet">
+      <summary>
+            Creates a new empty dataset.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.DestroyDataSet(Vuforia.DataSet,System.Boolean)">
+      <summary>
+            Destroy the given dataset.
+            Returns false if the given dataset is active.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.ActivateDataSet(Vuforia.DataSet)">
+      <summary>
+            Activates the given dataset.
+            Datasets can only be activated when the tracker is not running.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.DeactivateDataSet(Vuforia.DataSet)">
+      <summary>
+            Deactivates the given dataset.
+            This can only be done when the tracker is not running.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.GetActiveDataSets">
+      <summary>
+            Returns the currently activated datasets. 
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.GetDataSets">
+      <summary>
+            Returns all datasets.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.DestroyAllDataSets(System.Boolean)">
+      <summary>
+            Deactivates the currently active dataset and
+            destroys all datasets
+            </summary>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.GetTargetFinder``1">
+      <summary>
+            Gets a new Target finder of the specific type
+            </summary>
+      <returns>Instance of TargetFinder</returns>
+    </member>
+    <member name="M:Vuforia.ObjectTracker.GetTargetFinders">
+      <summary>
+            Returns all Target Finders.
+            </summary>
+    </member>
+    <member name="T:Vuforia.MultiTarget">
+      <summary>
+            A trackable that is made up of multiple targets with a fixed spatial
+            relation.
+            </summary>
+    </member>
+    <member name="T:Vuforia.MultiTargetBehaviour">
+      <summary>
+            This class serves both as an augmentation definition for a MultiTarget in the editor
+            as well as a tracked MultiTarget result at runtime
+            </summary>
+    </member>
+    <member name="P:Vuforia.MultiTargetBehaviour.MultiTarget">
+      <summary>
+            The MultiTarget that this MultiTargetBehaviour augments
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaUnity">
+      <summary>
+            A static utility class that exposes helper functions from Vuforia
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaUnity.InitError">
+      <summary>
+            InitError is an error value that is returned by Vuforia if something goes
+            wrong at initialization.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_VUFORIA_DRIVER_FAILED">
+      <summary>Vuforia Driver library failed to open.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_EXTERNAL_DEVICE_NOT_DETECTED">
+      <summary>Dependent external device not detected/plugged in.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_LICENSE_ERROR_PRODUCT_TYPE_MISMATCH">
+      <summary>Provided license key is not valid for this product.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_LICENSE_ERROR_CANCELED_KEY">
+      <summary>Provided license key is no longer valid.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_LICENSE_ERROR_NO_NETWORK_TRANSIENT">
+      <summary>Unable to verify license key due to network (Transient Error)</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_LICENSE_ERROR_NO_NETWORK_PERMANENT">
+      <summary>Unable to verify license key due to network (Permanent Error)</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_LICENSE_ERROR_INVALID_KEY">
+      <summary>Invalid license key passed to SDK.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_LICENSE_ERROR_MISSING_KEY">
+      <summary>License key is missing.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_NO_CAMERA_ACCESS">
+      <summary>Cannot access the camera.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_DEVICE_NOT_SUPPORTED">
+      <summary>The device is not supported by Vuforia.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_ERROR">
+      <summary>Another (unknown) initialization error has occured.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_ONGOING">
+      <summary>Initialization is currently in progress</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.InitError.INIT_SUCCESS">
+      <summary>Initialization has successfully completed</summary>
+    </member>
+    <member name="T:Vuforia.VuforiaUnity.VuforiaHint">
+      <summary>
+             Use when calling setHint()
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS">
+      <summary>
+            Specify the number of Image Targets that are handled by the tracker
+            at once (default 1).
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_OBJECT_TARGETS">
+      <summary>
+            Specify the number of Object Targets that are handled by the tracker
+            at once (default 1).
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.VuforiaHint.HINT_DELAYED_LOADING_OBJECT_DATASETS">
+      <summary>
+            Enable/disable delayed loading for object target dataset
+            a value of 0 means disabled, 1 means enabled (default 0).
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.VuforiaHint.HINT_ASYNC_FETCH_OF_LATEST_CALIBRATION">
+      <summary>
+             Asynchronously fetch the latest device calibration profile
+            
+              This hint enables asynchronous fetching of the latest device
+              calibration profile from the cloud, which does not block
+              Vuforia's initialization until the calibration profile is
+              successfully acquired. Skipping the blocking attempt to get
+              the latest profile can cause the SDK to run in a non-optimized
+              mode on the first run.
+              By default, acquiring of the latest device calibration
+              profile may block Vuforia's initialization for up to a
+              maximum timeout of 10 seconds or until a new profile is
+              successfully acquired from the cloud.
+              Please note that the hint should be set before Vuforia's
+              initialization to be effective.
+              To enable asynchronous fetching set the hint value to 1.
+              To disable asynchronous fetching set the hint value to 0.
+              Default is: 0.
+             </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.VuforiaHint.HINT_MODEL_TARGET_RECO_WHILE_EXTENDED_TRACKED">
+      <summary>
+            Turn on recognition engine for a trained dataset while extended tracking a model
+            
+            This hint enables the recognition engine when extended tracking an existing target.
+            It needs to be set afer the ObjectTracker has been initialized.
+            Valid values for the hint are 0 or 1.
+            When set to 0, the recognition engine is stopped for trained datasets after a model
+            target has been found and is never turned on again automatically. The datset needs to be
+            deactivated and activated, or the tracker stopped and started, in order to turn on
+            recognition again.
+            When set to 1, recognition is turned on as soon as an existing target is only extended tracked.
+            If the recogntition engine finds a new target in the image frame, tracking will be
+            switched to the newly identifed target, resulting in tracking loss of the prior model target
+            Default is: 1
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaUnity.StorageType">
+      <summary>
+            Storage type is used to interpret a given path string.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.StorageType.STORAGE_APP">
+      <summary>Indicates a relative path to an app local storage location.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.StorageType.STORAGE_APPRESOURCE">
+      <summary>Indicates a relative path to a resource bundled with the application.</summary>
+    </member>
+    <member name="F:Vuforia.VuforiaUnity.StorageType.STORAGE_ABSOLUTE">
+      <summary>Indicates an absolute path.</summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.Deinit">
+      <summary>
+            Deinitializes Vuforia
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.IsRendererDirty">
+      <summary>
+            Checks if the GL surface has changed
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.SetHint(Vuforia.VuforiaUnity.VuforiaHint,System.Int32)">
+      <summary>
+            Sets a hint for the Vuforia SDK
+            Hints help the SDK to understand the developer's needs.
+            However, depending on the device or SDK version the hints
+            might not be taken into consideration.
+            Returns false if the hint is unknown or deprecated.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.SetHint(System.UInt32,System.Int32)">
+      <summary>
+            Sets a hint for the Vuforia SDK
+            Hints help the SDK to understand the developer's needs.
+            However, depending on the device or SDK version the hints
+            might not be taken into consideration.
+            Returns false if the hint is unknown or deprecated.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.OnPause">
+      <summary>
+            Executes AR-specific tasks upon pausing the Unity application
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.OnResume">
+      <summary>
+            Executes AR-specific tasks upon resuming the Unity application
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.SetRendererDirty">
+      <summary>
+            Raises a flag that the rendering functionality needs to be reconfigured
+            e.g. when the projection matrix of the camera was changed externally.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.GetVuforiaLibraryVersion">
+      <summary>
+            Returns the version of the Vuforia SDK
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.SetDriverLibrary(System.String,System.IntPtr)">
+      <summary>
+            Sets up the name of the library that %Vuforia loads dynamically and uses
+             as an external source of camera or other input data.
+             The library must support the Vuforia Driver API and it must be placed
+             inside the app package to be loaded properly.
+             The exact path depends on the platform:
+             - Android: [apk-root-dir]/lib/[architecture]/library.so
+             - UWP: [appx-root-dir]/library.dll
+             - iOS: [appx-root-dir]/Frameworks/library.framework
+            
+             This function MUST be called before Vuforia::init() to have any effect. Once the
+             library name has been set and Vuforia::init() is called, Vuforia will try to
+              initialize and use the functionality provided by the Driver.
+            
+             To disable the Vuforia Driver functionality the following must be done:
+             - Call Vuforia::deinit()
+             - Call Vuforia::setDriverLibrary() with nullptr or empty string as the libraryName.
+             - Call Vuforia::init()
+            </summary>
+      <remarks>This functionality is currently only supported on Android and UWP platforms.</remarks>
+      <param name="libraryName">libraryName Full file name of the Driver library. Setting
+            this to nullptr or empty string, will disable the use of the Driver
+            functionalty during subsequent calls to Vuforia::init().</param>
+      <param name="userData">Arbitrary user defined data to be passed into the library,
+            when it gets loaded. %Vuforia only forwards the data and doesn't process it in any way.</param>
+      <returns>true if Vuforia was in uninitialized state and the parameter was therefore  set successfully</returns>
+    </member>
+    <member name="M:Vuforia.VuforiaUnity.SetDriverLibrary(System.String)">
+      <summary>
+            Sets up the name of the library that %Vuforia loads dynamically and uses
+             as an external source of camera or other input data.
+             The library must support the Vuforia Driver API and it must be placed
+             inside the app package to be loaded properly.
+             The exact path depends on the platform:
+             - Android: [apk-root-dir]/lib/[architecture]/library.so
+             - UWP: [appx-root-dir]/library.dll
+            
+             This function MUST be called before Vuforia::init() to have any effect. Once the
+             library name has been set and Vuforia::init() is called, Vuforia will try to
+              initialize and use the functionality provided by the Driver.
+            
+             To disable the Vuforia Driver functionality the following must be done:
+             - Call Vuforia::deinit()
+             - Call Vuforia::setDriverLibrary() with nullptr or empty string as the libraryName.
+             - Call Vuforia::init()
+            </summary>
+      <remarks>This functionality is currently only supported on Android and UWP platforms.</remarks>
+      <param name="libraryName">ibraryName Full file name of the Vuforia Driver library. Setting
+            this to nullptr or empty string, will disable the use of the Vuforia Driver
+            functionalty during subsequent calls to Vuforia::init().</param>
+      <returns>true if Vuforia was in uninitialized state and the parameter was therefore  set successfully</returns>
+    </member>
+    <member name="T:Vuforia.VuforiaARController">
+      <summary>
+            The VuforiaBehaviour class handles tracking and triggers native video
+            background rendering. The class updates all Trackables in the scene.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaARController.WorldCenterMode">
+      <summary>
+            The world center mode defines how the relative coordinates between
+            Trackables and camera are translated into Unity world coordinates.
+            If a world center is present the virtual camera in the Unity scene is
+            transformed with respect to that.
+            The world center mode is set through the Unity inspector.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaARController.WorldCenterMode.SPECIFIC_TARGET">
+      <summary>
+            User defines a single Trackable that defines the world center.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaARController.WorldCenterMode.FIRST_TARGET">
+      <summary>
+            Tracker uses the first Trackable that comes into view as the world
+            center (world center changes during runtime).
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaARController.WorldCenterMode.DEVICE">
+      <summary>
+            The device/camera is considered the world center, trackables are positioned with respect to it.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaARController.WorldCenterModeSetting">
+      <summary>
+            This property is used to query the active world center mode.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaARController.WorldCenter">
+      <summary>
+            This property is used to query the world center Trackable
+            (will return null in "NONE" mode).
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaARController.CameraDeviceMode">
+      <summary>
+            This property is used to query the currently set camera device mode
+            (DEFAULT, SPEED or QUALITY)
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaARController.HasStarted">
+      <summary>
+            If Vuforia has started successfully
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterBeforeVuforiaTrackersInitializedCallback(System.Action)">
+      <summary>
+            Register for a callback that is invoked even before Vuforia has initialized the trackers.
+            This should be used in particular when override the fusion mode in the configuration.
+            Should be called from an Awake() method to not miss the exact callback time between the two.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterVuforiaInitializedCallback(System.Action)">
+      <summary>
+            Register for a callback that is invoked after Vuforia has initialized and before the camera has started.
+            Should be called from an Awake() method to not miss the exact callback time between the two.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterBeforeVuforiaTrackersInitializedCallback(System.Action)">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterVuforiaInitializedCallback(System.Action)">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterVuforiaStartedCallback(System.Action)">
+      <summary>
+            Register for a callback that is invoked after Vuforia has completely started, including camera and trackers.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterVuforiaStartedCallback(System.Action)">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterTrackablesUpdatedCallback(System.Action)">
+      <summary>
+            Register for a callback that is invoked after the state of all trackables has been updated during a frame.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterTrackablesUpdatedCallback(System.Action)">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterOnPauseCallback(System.Action{System.Boolean})">
+      <summary>
+            Register for a callback that is invoked before Vuforia is pausing when the application is paused, 
+            and after Vuforia resumes when the application resumes. This can be used e.g. for restoring
+            a focus mode after an application pause.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterOnPauseCallback(System.Action{System.Boolean})">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterBackgroundTextureChangedCallback(System.Action)">
+      <summary>
+            Register for a callback that is invoked when the background texture is changed.
+            More than one callback can be registered.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterBackgroundTextureChangedCallback(System.Action)">
+      <summary>
+            Unregister a previously registered callback.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.RegisterVideoBgEventHandler(Vuforia.IVideoBackgroundEventHandler)">
+      <summary>
+            This method registers a new video background event handler at the Tracker.
+            These handlers are called as soon as the video background config has changed
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UnregisterVideoBgEventHandler(Vuforia.IVideoBackgroundEventHandler)">
+      <summary>
+            This method unregisters a video background event handler.
+            Returns "false" if event handler does not exist.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.SetWorldCenterMode(Vuforia.VuforiaARController.WorldCenterMode)">
+      <summary>
+            This method is used to set the world center mode.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.SetWorldCenter(Vuforia.TrackableBehaviour)">
+      <summary>
+            This method is used to set the world center in "USER" mode.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.GetVideoBackgroundRectInViewPort">
+      <summary>
+            The are in the viewport that is covered by the video background.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.GetSurfaceOrientation">
+      <summary>
+            This method returns the surface orientation.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaARController.UpdateState(System.Boolean,System.Boolean)">
+      <summary>
+            Updates the scene with the latest tracking data and calls various callbacks
+            </summary>
+      <param name="forceUpdate">Forces updates to be made even if called multiple times during a single frame</param>
+      <param name="reapplyOldState">Updates the scene again even when the state has not changed. 
+            This can be useful if the camera has been moved, but no new tracking state has been reported yet.</param>
+    </member>
+    <member name="T:Vuforia.VuforiaManager">
+      <summary>
+            The VuforiaManager manages updating trackables, their state and position to the camera
+            It is called from the VuforiaBehaviour.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaManager.TrackableIdPair">
+      <summary>
+            We have to use two different types of ids in the queue for the world center.
+            We use this struct to distinguish between result-ids for VuMarks
+            and trackable-ids for all other trackables
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.Instance">
+      <summary>
+            Returns an instance of a VuforiaManager (thread safe)
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.WorldCenterMode">
+      <summary>
+            World Center Mode setting on the ARCamera
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.WorldCenter">
+      <summary>
+            World Center setting on the ARCamera
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.VuMarkWorldCenter">
+      <summary>
+            Define a VuMark template as world center. The first detected VuMark-target with this template
+            is considered as world center.
+            If only a specific VuMark-behaviour should be used as world center, use the generic WorldCenter-property.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.ARCameraTransform">
+      <summary>
+            A handle to the ARCamera Transform object or the External Tracking Frame of Reference
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.CentralAnchorPoint">
+      <summary>
+            This defines the central anchor point transform from which camera pose will be applied to trackables.
+            By default this is equivalent to the ARCameraTransform, but when integrated with a 3rd party VR SDK it will point to another object.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.Initialized">
+      <summary>
+            returns true once the VuforiaManager has been initialized
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaManager.CurrentFrameIndex">
+      <summary>
+            The frame index of the current Vuforia state
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaManager.Init">
+      <summary>
+            Initialization
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaManager.Deinit">
+      <summary>
+            Free globally allocated containers
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaRenderer">
+      <summary>
+            This class takes care about rendering the video background in the right size and orientation
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaRenderer.FpsHint">
+      <summary>
+            Application behavior aspects influencing the recommended render frame
+            rate. Use as parameters to GetRecommendedFps.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.FpsHint.NONE">
+      <summary>
+            No FPS hint defined
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.FpsHint.NO_VIDEOBACKGROUND">
+      <summary>
+            The application does not draw the video background (in optical see-
+            through AR or VR mode). Do not set this flag when in video see-
+            through AR mode.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.FpsHint.POWEREFFICIENCY">
+      <summary>
+            The application requests conservative power consumption to reduce
+            heat accumulation and increase battery life. On some devices this
+            may be at the cost of reduced application performance and decreased
+            quality of experience.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.FpsHint.FAST">
+      <summary>
+            The application uses content that requires a high rendering rate, 
+            E.g. using smooth character animation.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaRenderer.VideoBGCfgData">
+      <summary>
+            This struct stores Video Background configuration data. It stores
+            position and size of the video background on the screen.
+            [DEPRECATED]
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaRenderer.Vec2I">
+      <summary>
+            This struct stores 2D integer vectors.
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaRenderer.VideoTextureInfo">
+      <summary>
+            Describes the size of the texture in the graphics unit as well as
+            the size of the image inside the texture. The latter corresponds
+            to the size of the image delivered by the camera
+            </summary>
+    </member>
+    <member name="T:Vuforia.VuforiaRenderer.RendererAPI">
+      <summary>
+            Which native rendering API is used
+            [DEPRECATED]
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.RendererAPI.GL_20">
+      <summary>
+            OpenGL ES 2.0
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.RendererAPI.METAL">
+      <summary>
+            iOS Metal
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.RendererAPI.DIRECTX3D11">
+      <summary>
+            Windows DirectX-3D 11
+            </summary>
+    </member>
+    <member name="F:Vuforia.VuforiaRenderer.RendererAPI.GL_30">
+      <summary>
+            OpenGL ES 3.0
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaRenderer.Instance">
+      <summary>
+            Returns an instance of a VuforiaRenderer (thread safe)
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaRenderer.VideoBackgroundTexture">
+      <summary>
+            The texture the video background is rendered into
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.GetVideoBackgroundConfig">
+      <summary>
+            Retrieves the current layout configuration of the video background.
+            [DEPRECATED]
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.ClearVideoBackgroundConfig">
+      <summary>
+            clears the config of the videobackground when Vuforia is stopped.
+            [DEPRECATED]
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.SetVideoBackgroundConfig(Vuforia.VuforiaRenderer.VideoBGCfgData)">
+      <summary>
+            Configures the layout of the video background (location on the screen
+            and size).
+            [DEPRECATED]
+            </summary>
+    </member>
+    <!-- Badly formed XML comment ignored for member "M:Vuforia.VuforiaRenderer.createNativeTexture(System.Int32,System.Int32,System.Int32)" -->
+    <member name="M:Vuforia.VuforiaRenderer.SetVideoBackgroundTexture(UnityEngine.Texture)">
+      <summary>
+            Tells Vuforia where the texture id to use for updating video background data.
+            When using multihreaded rendering this texture ID needs to be resolved in an Awake method
+            (texture.GetNativeTexturePtr())
+            [DEPRECATED]
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.SetVideoBackgroundTexturePtr(UnityEngine.Texture)">
+      <summary>
+            Tells Vuforia the texture pointer to use for updating video background data.
+            When using multihreaded rendering this texture ID needs to be resolved in an Awake method
+            (texture.GetNativeTexturePtr())
+            [DEPRECATED]
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.IsVideoBackgroundInfoAvailable">
+      <summary>
+            Check if video background info is available
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.GetVideoTextureInfo">
+      <summary>
+            Returns the texture info associated with the current video background
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.Pause(System.Boolean)">
+      <summary>
+            Turns pausing on or off.
+            Pausing will freeze the camera video and all trackables will remain in their current state.
+            Autorotation will be disabled during video background freezing.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.GetRecommendedFps(Vuforia.VuforiaRenderer.FpsHint)">
+      <summary>
+            Query recommended rendering frame rate based on application hints.
+            The target rendering frame rate of an AR or VR application is an
+            important trade-off between optimal experience and device power usage.
+            The choice is influenced by multiple parameters including device type,
+            the active Trackers, the camera and/or sensor frame rates. Furthermore
+            there are application specific trade offs to consider. These hints can be
+            passed to the function as parameters (see FpsHint). For example,
+            an application with animated content may need consistent 60 fps rendering
+            even on a device that can only deliver poses at 30 fps. GetRecommendedFps 
+            considers the device parameters as well as the application specific hints
+            and returns a recommended frame rate. The returned value can then be set
+            via setTargetFps. Note that GetRecommendedFps may return different values
+            tuned to the active CameraDevice.CameraDeviceMode and active Trackers. 
+            Thus it is recommended to call this API after the application has completed 
+            the camera and tracker setup as well as when an application transitions
+            between modes (For example when transitioning between AR to VR modes)
+            </summary>
+      <param name="flags">Bitfield of FpsHint flags</param>
+    </member>
+    <member name="M:Vuforia.VuforiaRenderer.GetRendererAPI">
+      <summary>
+            Query the native rendering API.
+            Currently supported: OpenGL ES 2.0, ES 3.0, Metal or DirectX3D11
+            [DEPRECATED]
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:Vuforia.VuforiaRuntimeUtilities">
+      <summary>
+            A utility class containing various helper methods
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.GetStoragePath(System.String,Vuforia.VuforiaUnity.StorageType)">
+      <summary>
+            Based on the storage type and current platform returns to the caller the correct path
+            for a given platform.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.StripStreamingAssetsFromPath(System.String)">
+      <summary>
+            Returns the file path without the first two elements of the path for
+            example it would remove '*/StreamingAssets'.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaRuntimeUtilities.ScreenOrientation">
+      <summary>
+            Wrapper for Screen.orientation to enable correct handling in Editor
+            and on devices that do not support all orientations.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaRuntimeUtilities.IsLandscapeOrientation">
+      <summary>
+            returns true if ScreenOrientation is in ANY landscape mode
+            </summary>
+    </member>
+    <member name="P:Vuforia.VuforiaRuntimeUtilities.IsPortraitOrientation">
+      <summary>
+            returns true if VuforiaScreenOrientation is in ANY portrait mode
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.ForceDisableTrackables">
+      <summary>
+            Disables all TrackableBehaviours. Used when an GL or orientation error is detected in a sample.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.IsPlayMode">
+      <summary>
+            returns ONLY true if we are running in Play Mode
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.IsWSARuntime">
+      <summary>
+            returns ONLY true if we are in any one of the WSA modes
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.IsVuforiaEnabled">
+      <summary>
+            returns true if we have access to Vuforia (on a mobile device OR in the emulator in Unity Pro with a webcam connected)
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.IsWebCamUsed">
+      <summary>
+            If the web cam is enabled.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.ScreenSpaceToCameraFrameCoordinatesNormalized(UnityEngine.Vector2,UnityEngine.Rect)">
+      <summary>
+            Calculates a normalized position in camera frame coordinates based on the current orientation and background config for given screen-space coordinates
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.ViewPortToCameraFrameCoordinatesNormalized(UnityEngine.Vector2,UnityEngine.Rect)">
+      <summary>
+            Calculates a normalized position in camera frame coordinates based on the current orientation and background config for given Unity ViewPort coordinates
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.ScreenSpaceToCameraFrameCoordinates(UnityEngine.Vector2,UnityEngine.Rect,System.Boolean,Vuforia.CameraDevice.VideoModeData)">
+      <summary>
+            Calculates a position in camera frame coordinates based on the current orientation and background config for a given screen-space position
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.CameraFrameToScreenSpaceCoordinates(UnityEngine.Vector2,UnityEngine.Rect,System.Boolean,Vuforia.CameraDevice.VideoModeData)">
+      <summary>
+            Calculates a position in screen space coordinates based on the current orientation and background config for a given screen-space position
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.CameraFrameToScreenSpaceCoordinates(Vuforia.OrientedBoundingBox,UnityEngine.Rect,System.Boolean,Vuforia.CameraDevice.VideoModeData)">
+      <summary>
+            Calculates the screen space parameters for an oriented bounding box (center, half extents, rotation) specified in camera frame coordinates.
+            The calculation is based on the current screen orientation.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.SelectRectTopLeftAndBottomRightForLandscapeLeft(UnityEngine.Rect,System.Boolean,UnityEngine.Vector2@,UnityEngine.Vector2@)">
+      <summary>
+            Selects the top left and bottom right corners from a rect, where "top", "left", "bottom" and "right" are in respect to landscape left orientation
+            Used for region of interest calculations for text tracking
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.DisableSleepMode">
+      <summary>
+            The device screen stays turned on and bright 
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.ResetSleepMode">
+      <summary>
+            Reset the sleep mode to the system settings.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.MatrixIsNaN(UnityEngine.Matrix4x4)">
+      <summary>
+            Check if a matrix is NaN. return true if any element is NaN, false otherwise.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.SetAllowedFusionProviders(Vuforia.FusionProviderType)">
+      <summary>
+            Specifies which providers Vuforia Fusion is allowed to select from
+            
+            This function must be called before initializing Vuforia. If the call is successful,
+            it returns the value of providerTypes which was passed in.
+            
+            If called after initializing Vuforia Engine, the function returns INVALID_OPERATION.
+            
+            providerTypes is a single value created by or'ing together the desired
+            FusionProviderType enum values.
+            
+            Note: The enum value INVALID_OPERATION should not be used when setting up
+            the providerTypes.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VuforiaRuntimeUtilities.GetActiveFusionProvider">
+      <summary>
+            Returns which provider Vuforia Fusion has selected to use
+            
+            This function must be called after initializing Vuforia. If called before
+            initializing Vuforia Engine, the function returns INVALID_OPERATION.
+            </summary>
+    </member>
+    <member name="T:Vuforia.SurfaceUtilities">
+      <summary>
+            This class publicly exposes native methods that are related to surface management.
+            These methods are used by the Unity Extension and usually should not be used in application code.
+            </summary>
+    </member>
+    <member name="M:Vuforia.SurfaceUtilities.OnSurfaceCreated">
+      <summary>
+            Signals native that the rendering surface has been created by Unity
+            </summary>
+    </member>
+    <member name="M:Vuforia.SurfaceUtilities.OnSurfaceDeinit">
+      <summary>
+            Signals native that the rendering surface should be deinitialized
+            </summary>
+    </member>
+    <member name="M:Vuforia.SurfaceUtilities.HasSurfaceBeenRecreated">
+      <summary>
+            Checks if the GLSurface has been recreated
+            </summary>
+    </member>
+    <member name="M:Vuforia.SurfaceUtilities.OnSurfaceChanged(System.Int32,System.Int32)">
+      <summary>
+            Signals native that the screen size has changed (device rotation)
+            </summary>
+    </member>
+    <member name="M:Vuforia.SurfaceUtilities.SetSurfaceOrientation(UnityEngine.ScreenOrientation)">
+      <summary>
+            Sets a new orientation
+            </summary>
+    </member>
+    <member name="M:Vuforia.SurfaceUtilities.GetSurfaceOrientation">
+      <summary>
+            Gets the current  orientation
+            </summary>
+    </member>
+    <member name="T:Vuforia.TargetFinder">
+      <summary>
+            This class represents a service that retrieves targets using image and/or model recognition.
+            </summary>
+    </member>
+    <member name="T:Vuforia.TargetFinder.InitState">
+      <summary>
+            Status codes returned by the init() function
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.InitState.INIT_DEFAULT">
+      <summary>
+            Initialization has not started
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.InitState.INIT_RUNNING">
+      <summary>
+            Initialiation is running
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.InitState.INIT_SUCCESS">
+      <summary>
+            Initialization completed successfully
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.InitState.INIT_ERROR_NO_NETWORK_CONNECTION">
+      <summary>
+            No network connection
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.InitState.INIT_ERROR_SERVICE_NOT_AVAILABLE">
+      <summary>
+            Service is not available
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.InitState.INIT_ERROR_DEVICE_DATABASE_ERROR">
+      <summary>
+            Error loading the device database
+            </summary>
+    </member>
+    <member name="T:Vuforia.TargetFinder.UpdateState">
+      <summary>
+            Status codes returned by the Update() function
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_NO_MATCH">
+      <summary>
+            No matches since the last update
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_NO_REQUEST">
+      <summary>
+            No recognition request since the last update
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_RESULTS_AVAILABLE">
+      <summary>
+            New search results have been found
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_AUTHORIZATION_FAILED">
+      <summary>
+            Credentials are wrong or outdated
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_PROJECT_SUSPENDED">
+      <summary>
+            The specified project was suspended.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_NO_NETWORK_CONNECTION">
+      <summary>
+            Device has no network connection
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_SERVICE_NOT_AVAILABLE">
+      <summary>
+            Server not found, down or overloaded.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_BAD_FRAME_QUALITY">
+      <summary>
+            Low-frame quality has been continuously observed
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_UPDATE_SDK">
+      <summary>
+            SDK Version outdated.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_TIMESTAMP_OUT_OF_RANGE">
+      <summary>
+            Client/Server clocks too far away.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.UpdateState.UPDATE_ERROR_REQUEST_TIMEOUT">
+      <summary>
+            No response to network request after timeout.
+            </summary>
+    </member>
+    <member name="T:Vuforia.TargetFinder.FilterMode">
+      <summary>
+            Filter modes to be passed into Update() function
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.FilterMode.FILTER_NONE">
+      <summary>
+            No results are filtered, all successful queries are returned
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.FilterMode.FILTER_CURRENTLY_TRACKED">
+      <summary>
+            Filter out targets that are currently active (Most Common)
+            </summary>
+    </member>
+    <member name="T:Vuforia.TargetFinder.TargetSearchResult">
+      <summary>
+            Base class for a TargetFinder result
+            </summary>
+    </member>
+    <member name="T:Vuforia.TargetFinder.CloudRecoSearchResult">
+      <summary>
+            CloudReco search result that contains all known data of a specific search result
+            </summary>
+    </member>
+    <member name="F:Vuforia.TargetFinder.CloudRecoSearchResult.MetaData">
+            Metadata associated with this target
+        </member>
+    <member name="F:Vuforia.TargetFinder.CloudRecoSearchResult.TargetSize">
+            width of the target (in 3D scene units) (DEPRECATED)
+        </member>
+    <member name="F:Vuforia.TargetFinder.CloudRecoSearchResult.TrackingRating">
+            The tracking rating represents a 5-star rating describing the
+            suitability of this target for tracking on a scale from 0 to 5. A low
+            tracking rating may result in poor tracking or unstable augmentation.
+        </member>
+    <member name="M:Vuforia.TargetFinder.GetInitState">
+      <summary>
+             Returns the current state of the initialization process
+            
+             Returns INIT_SUCCESS if the cloud-based recognition system was
+             initialized successfully. Initialization requires a network connection
+             to be available on the device, otherwise INIT_ERROR_NO_NETWORK_CONNECTION
+             is returned. If the cloud-based recognition service is not available this
+             function will return INIT_ERROR_SERVICE_NOT_AVAILABLE. Returns
+             INIT_DEFAULT if initialization has not been started. Returns INIT_RUNNING
+             if the initialization process has not completed.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.Deinit">
+      <summary>
+            Deinitializes the cloud-based recognition system
+            </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.StartRecognition">
+      <summary>
+             Starts cloud recognition
+            
+             Starts continuous recognition of Targets from the cloud.
+             Use Update() and GetResults() to retrieve search matches.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.Stop">
+      <summary>
+            Stops cloud recognition
+            </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.IsRequesting">
+      <summary>
+             Returns true if the TargetFinder is in 'requesting' mode
+            
+             When in 'requesting' mode the TargetFinder has issued a search 
+             query to the recognition server and is waiting for the results.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.Update">
+      <summary>
+             Update cloud reco results
+            
+             Clears and rebuilds the list of target search results with results found
+             since the last call to Update().
+             Also refreshes the IsRequesting flag. 
+             Returns the status code  UPDATE_RESULTS_AVAILABLE if new search results have been found.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.Update(Vuforia.TargetFinder.FilterMode)">
+      <summary>
+             Update cloud reco results
+            
+             Clears and rebuilds the list of target search results with results found
+             since the last call to Update().
+             Also refreshes the IsRequesting flag. 
+             Returns the status code  UPDATE_RESULTS_AVAILABLE if new search results have been found.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.GetResults">
+      <summary>
+             Returns new search results
+            
+             Earlier search result instances are destroyed when Update()
+             is called. 
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.EnableTracking(Vuforia.TargetFinder.TargetSearchResult,System.String)">
+      <summary>
+             Enable this search result for tracking
+            
+             Creates an ImageTarget for local detection and tracking of this target
+             and returns a new ImageTargetBehaviour attached to a new game object with the given name.
+             Note that this call may result in an earlier ImageTarget that was enabled for
+             tracking to be destroyed, including its ImageTargetBehaviour. 
+             Thus it is not advised to hold a pointer to an
+             ealier created ImageTarget after calling enableTracking again. Returns
+             NULL if the target failed to be enabled for tracking.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.EnableTracking(Vuforia.TargetFinder.TargetSearchResult,UnityEngine.GameObject)">
+      <summary>
+             Enable this search result for tracking.
+            
+             Creates an ObjectTarget for local detection and tracking of this target.
+             If the given game object has no ObjectTargetBehaviour, a new one will be created.
+             Note that this call may result in an earlier ObjectTarget that was enabled for
+             tracking to be destroyed, including its ObjectTargetBehaviour. 
+             Thus it is not advised to hold a pointer to an
+             ealier created ObjectTarget after calling enableTracking again. Returns
+             NULL if the target failed to be enabled for tracking.
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.ClearTrackables(System.Boolean)">
+      <summary>
+             Clears all targets enabled for tracking
+            
+             Destroys all Trackables that have been created via EnableTracking().
+             </summary>
+    </member>
+    <member name="M:Vuforia.TargetFinder.GetObjectTargets">
+      <summary>
+            Returns the Object Targets currently enabled for tracking.
+            </summary>
+    </member>
+    <member name="T:Vuforia.Trackable">
+      <summary>
+            The base class behaviour for all trackable types in Vuforia.
+            </summary>
+    </member>
+    <member name="P:Vuforia.Trackable.Name">
+      <summary>
+            The name of the Trackable
+            </summary>
+    </member>
+    <member name="P:Vuforia.Trackable.ID">
+      <summary>
+            The runtime Id of the Trackable
+            </summary>
+    </member>
+    <member name="T:Vuforia.TrackableBehaviour">
+      <summary>
+            The base class for all TrackableBehaviours in Vuforia
+            This class serves both as an augmentation definition for a Trackable in the editor
+            as well as a tracked Trackable result at runtime
+            </summary>
+    </member>
+    <member name="T:Vuforia.TrackableBehaviour.Status">
+      <summary>
+            The tracking status of the TrackableBehaviour.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.Status.NO_POSE">
+      <summary>
+            Pose for the trackable could not be delivered.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.Status.LIMITED">
+      <summary>
+            The tracking is limited.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.Status.DETECTED">
+      <summary>
+            The trackable was detected.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.Status.TRACKED">
+      <summary>
+            The trackable was tracked.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.Status.EXTENDED_TRACKED">
+      <summary>
+            The trackable was extended tracked.
+            </summary>
+    </member>
+    <member name="T:Vuforia.TrackableBehaviour.StatusInfo">
+      <summary>
+            Information on the tracking status. Gives the primary reason about the 
+            problem with tracking (STATUS::NO_POSE or STATUS::LIMITED).
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.NORMAL">
+      <summary>
+            Status is normal
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.UNKNOWN">
+      <summary>
+            Unknown reason for limited status.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.INITIALIZING">
+      <summary>
+            Not enough information yet for accurate tracking.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.RELOCALIZING">
+      <summary>
+            The tracking system is currently relocalizing.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.EXCESSIVE_MOTION">
+      <summary>
+            Moving too fast for accurate tracking.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.INSUFFICIENT_FEATURES">
+      <summary>
+            Not enough features for accurate tracking.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.INSUFFICIENT_LIGHT">
+      <summary>
+            Not enough light for accurate tracking.
+            </summary>
+    </member>
+    <member name="F:Vuforia.TrackableBehaviour.StatusInfo.NO_DETECTION_RECOMMENDING_GUIDANCE">
+      <summary>
+            Could not snap the target
+            </summary>
+    </member>
+    <member name="P:Vuforia.TrackableBehaviour.CurrentStatus">
+      <summary>
+            The tracking status of the TrackableBehaviour
+            </summary>
+    </member>
+    <member name="P:Vuforia.TrackableBehaviour.CurrentStatusInfo">
+      <summary>
+            Information on the tracking status. Gives the primary reason about the 
+            problem with tracking (STATUS::NO_POSE or STATUS::LIMITED).
+            </summary>
+    </member>
+    <member name="P:Vuforia.TrackableBehaviour.Trackable">
+      <summary>
+            The Trackable created at runtime that is augmented by this TrackableBehaviour
+            </summary>
+    </member>
+    <member name="P:Vuforia.TrackableBehaviour.TrackableName">
+      <summary>
+            The name of the Trackable.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackableBehaviour.RegisterTrackableEventHandler(Vuforia.ITrackableEventHandler)">
+      <summary>
+            This method registers a new Tracker event handler at the Tracker.
+            These handlers are called as soon as ALL Trackables have been updated
+            in this frame.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackableBehaviour.UnregisterTrackableEventHandler(Vuforia.ITrackableEventHandler)">
+      <summary>
+            This method unregisters a Tracker event handler.
+            Returns "false" if event handler does not exist.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackableBehaviour.OnTrackerUpdate(Vuforia.TrackableBehaviour.Status,Vuforia.TrackableBehaviour.StatusInfo)">
+      <summary>
+            Is triggered by the TrackerBehavior after it has updated.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackableBehaviour.OnFrameIndexUpdate(System.Int32)">
+      <summary>
+            Is triggered by the StateManager after each render frame
+            </summary>
+      <param name="newFrameIndex">Frame index of processed frame, multiple render frames can have the same frame index</param>
+    </member>
+    <member name="T:Vuforia.TrackableSource">
+      <summary>
+            An opaque handle for creating a new Trackable in a DataSet.
+            </summary>
+    </member>
+    <member name="T:Vuforia.Tracker">
+      <summary>
+            The common base class for all Tracker classes
+            </summary>
+    </member>
+    <member name="M:Vuforia.Tracker.Start">
+      <summary>
+            Starts the Tracker
+            </summary>
+    </member>
+    <member name="M:Vuforia.Tracker.Stop">
+      <summary>
+            Stops the Tracker
+            </summary>
+    </member>
+    <member name="P:Vuforia.Tracker.IsActive">
+      <summary>
+            If the Tracker is currently active
+            </summary>
+    </member>
+    <member name="T:Vuforia.TrackerManager">
+      <summary>
+            This class serves as a singleton to retrieve the Trackers and the StateManager
+            </summary>
+    </member>
+    <member name="P:Vuforia.TrackerManager.Instance">
+      <summary>
+            Returns an instance of a TrackerManager (thread safe)
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackerManager.GetTracker``1">
+      <summary>
+            Returns the instance of the given tracker type
+            See the Tracker base class for a list of available tracker classes.
+            This function will return null if the tracker of the given type has
+            not been initialized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackerManager.InitTracker``1">
+      <summary>
+            Initializes the tracker of the given type
+            Initializing a tracker must not be done when the CameraDevice
+            is initialized or started. This function will return null if the
+            CameraDevice is currently initialized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackerManager.DeinitTracker``1">
+      <summary>
+            Deinitializes the tracker of the given type and frees any resources
+            used by the tracker.
+            Deinitializing a tracker must not be done when the CameraDevice
+            is initialized or started. This function will return false if the
+            tracker of the given type has not been initialized or if the
+            CameraDevice is currently initialized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.TrackerManager.GetStateManager">
+      <summary>
+            Returns the state manager instance that can be used to access
+            all currently tracked TrackableBehaviours
+            </summary>
+    </member>
+    <member name="M:Vuforia.ITrackerManager.GetTracker``1">
+      <summary>
+            Returns the instance of the given tracker type
+            See the Tracker base class for a list of available tracker classes.
+            This function will return null if the tracker of the given type has
+            not been initialized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ITrackerManager.InitTracker``1">
+      <summary>
+            Initializes the tracker of the given type
+            Initializing a tracker must not be done when the CameraDevice
+            is initialized or started. This function will return null if the
+            CameraDevice is currently initialized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ITrackerManager.DeinitTracker``1">
+      <summary>
+            Deinitializes the tracker of the given type and frees any resources
+            used by the tracker.
+            Deinitializing a tracker must not be done when the CameraDevice
+            is initialized or started. This function will return false if the
+            tracker of the given type has not been initialized or if the
+            CameraDevice is currently initialized.
+            </summary>
+    </member>
+    <member name="M:Vuforia.ITrackerManager.GetStateManager">
+      <summary>
+            Returns the state manager instance that can be used to access
+            all currently tracked TrackableBehaviours
+            </summary>
+    </member>
+    <member name="T:Vuforia.UserDefinedTargetBuildingBehaviour">
+      <summary>
+            This Component can be used to create new ImageTargets at runtime. It can be configured to start scanning automatically
+            or via a call from an external script.
+            Registered event handlers will be informed of changes in the frame quality as well as new TrackableSources
+            </summary>
+    </member>
+    <member name="F:Vuforia.UserDefinedTargetBuildingBehaviour.StopTrackerWhileScanning">
+      <summary>
+            if the tracker should be stopped when scanning is started and resumed when scanning is stopped
+            </summary>
+    </member>
+    <member name="F:Vuforia.UserDefinedTargetBuildingBehaviour.StartScanningAutomatically">
+      <summary>
+            if this is set to true, scanning will start automatically when this component is activated
+            </summary>
+    </member>
+    <member name="F:Vuforia.UserDefinedTargetBuildingBehaviour.StopScanningWhenFinshedBuilding">
+      <summary>
+            if scanning should be stopped automatically when a new target is built
+            </summary>
+    </member>
+    <member name="M:Vuforia.UserDefinedTargetBuildingBehaviour.RegisterEventHandler(Vuforia.IUserDefinedTargetEventHandler)">
+      <summary>
+            Registers an event handler with this UserDefinedTargetBuildingBehaviour which will be called on events
+            </summary>
+    </member>
+    <member name="M:Vuforia.UserDefinedTargetBuildingBehaviour.UnregisterEventHandler(Vuforia.IUserDefinedTargetEventHandler)">
+      <summary>
+            Unregisters an event handler
+            </summary>
+    </member>
+    <member name="M:Vuforia.UserDefinedTargetBuildingBehaviour.StartScanning">
+      <summary>
+            Starts scanning the current camera image for features. 
+            This will trigger callbacks to the registered event handlers whenever the
+            frame quality changes.
+            If 'StopTrackerWhileScanning' is set, this will stop the ObjectTracker
+            </summary>
+    </member>
+    <member name="M:Vuforia.UserDefinedTargetBuildingBehaviour.BuildNewTarget(System.String,System.Single)">
+      <summary>
+            This will start building a new target and report back to the event handlers as soon
+            as a new TrackableSource is available.
+            </summary>
+    </member>
+    <member name="M:Vuforia.UserDefinedTargetBuildingBehaviour.StopScanning">
+      <summary>
+            Stops scanning, event handlers will be informed.
+            If 'StopTrackerWhileScanning' is set, this will resume the ObjectTracker
+            </summary>
+    </member>
+    <member name="T:Vuforia.VideoBackgroundBehaviour">
+      <summary>
+            The VideoBackgroundBehaviour class handles native video background rendering.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VideoBackgroundBehaviour.ResetBackgroundPlane(System.Boolean)">
+      <summary>
+            This method toggles the mesh renderer of the background plane
+            </summary>
+    </member>
+    <member name="M:Vuforia.VideoBackgroundBehaviour.SetVideoBackgroundMaterial(UnityEngine.Material)">
+      <summary>
+            Allows for setting the material on the meshrenderer externally.
+            </summary>
+      <param name="videoBackgroundMaterial">
+      </param>
+    </member>
+    <member name="P:Vuforia.VideoBackgroundManager.VideoBackgroundEnabled">
+      <summary>
+            Is video background rendering enabled
+            </summary>
+    </member>
+    <member name="M:Vuforia.VideoBackgroundManager.SetVideoBackgroundEnabled(System.Boolean)">
+      <summary>
+            Enable or disable rendering the video background
+            </summary>
+            Calling this method will set the AR/VR-mode and enable or disable all behaviours regarding video background rendering
+        </member>
+    <member name="T:Vuforia.VirtualButton">
+      <summary>
+             A virtual button on a trackable
+            
+             Methods to modify a VirtualButton must not be called while the
+             corresponding DataSet is active. The dataset must be deactivated first
+             before reconfiguring a VirtualButton.
+             </summary>
+    </member>
+    <member name="T:Vuforia.VirtualButton.Sensitivity">
+      <summary>
+            The sensitivity of this virtual button. This is a trade off between fast
+            detection and robustness again accidental occlusion.
+            </summary>
+    </member>
+    <member name="F:Vuforia.VirtualButton.Sensitivity.HIGH">
+      <summary>Fast detection.</summary>
+    </member>
+    <member name="F:Vuforia.VirtualButton.Sensitivity.MEDIUM">
+      <summary>Balanced between fast and robust.</summary>
+    </member>
+    <member name="F:Vuforia.VirtualButton.Sensitivity.LOW">
+      <summary>Robust detection.</summary>
+    </member>
+    <member name="F:Vuforia.VirtualButton.DEFAULT_SENSITIVITY">
+      <summary>
+            The standard sensitivity
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButton.Name">
+      <summary>
+            Returns the name of the button
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButton.ID">
+      <summary>
+            Returns a unique id for this virtual button.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButton.Enabled">
+      <summary>
+            Returns true if the virtual button is active (updates while tracking).
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButton.Area">
+      <summary>
+            Returns the currently set Area
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButton.SetArea(Vuforia.RectangleData)">
+      <summary>
+             Defines a new area for the button area in 3D scene units (the
+             coordinate system is local to the ImageTarget).
+            
+             This method must not be called while the corresponding DataSet is
+             active or it will return false.
+             </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButton.SetSensitivity(Vuforia.VirtualButton.Sensitivity)">
+      <summary>
+             Sets the sensitivity of the virtual button
+            
+             Sensitivity allows deciding between fast and robust button press
+             measurements. This method must not be called while the corresponding
+             DataSet is active or it will return false.
+             </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButton.SetEnabled(System.Boolean)">
+      <summary>
+             Enables or disables a virtual button
+            
+             This method must not be called while the corresponding DataSet is
+             active or it will return false.
+             </summary>
+    </member>
+    <member name="T:Vuforia.VirtualButtonBehaviour">
+      <summary>
+            This behaviour associates a Virtual Button with a game object. Use the
+            functionality in ImageTargetBehaviour to create and destroy Virtual Buttons
+            at run-time.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButtonBehaviour.VirtualButtonName">
+      <summary>
+            The names of this virtual button.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButtonBehaviour.Pressed">
+      <summary>
+            Returns true if this button is currently pressed.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButtonBehaviour.HasUpdatedPose">
+      <summary>
+            if the pose has been updated once
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButtonBehaviour.UnregisterOnDestroy">
+      <summary>
+            Unregistering Virtual Buttons should only be done if they have been 
+            registered at runtime. This property is automatically set by
+            ImageTargetBehaviour on registration.
+            </summary>
+    </member>
+    <member name="P:Vuforia.VirtualButtonBehaviour.VirtualButton">
+      <summary>
+            The VirtualButton Object created at runtime
+            </summary>
+    </member>
+    <member name="F:Vuforia.VirtualButtonBehaviour.TARGET_OFFSET">
+      <summary>
+            The vertical offset of the graphic representation of a virtual button in respect to the target
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.RegisterEventHandler(Vuforia.IVirtualButtonEventHandler)">
+      <summary>
+            Registers an event handler with this Virtual Button which will be called
+            when a state changed is detected.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.UnregisterEventHandler(Vuforia.IVirtualButtonEventHandler)">
+      <summary>
+            Registers an event handler with this Virtual Button which will be called
+            when a state changed is detected.
+            Returns true on success. False otherwise.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.CalculateButtonArea(UnityEngine.Vector2@,UnityEngine.Vector2@)">
+      <summary>
+            Calculates the 2D button area that the Virtual Button currently occupies
+            in the Image Target.
+            Returns true if the area was computed successfully. False otherwise.
+            Passes out the top left and bottom right position of the rectangle area.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.UpdateAreaRectangle">
+      <summary>
+            Update the virtual button rect in native
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.UpdateSensitivity">
+      <summary>
+            Update sensitivity in native
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.UpdatePose">
+      <summary>
+            UpdatePose() is called each frame to ensure the virtual button is clamped
+            to the image target plane and remains axis-aligned with respect to the
+            target. Return true if the defining area of the virtual button has
+            changed, false otherwise.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.OnTrackerUpdated(System.Boolean)">
+      <summary>
+            Called after the VuforiaBehaviour has updated.
+            </summary>
+    </member>
+    <member name="M:Vuforia.VirtualButtonBehaviour.GetImageTargetBehaviour">
+      <summary>
+            Returns the Image Target that this Virtual Button is associated with.
+            </summary>
+    </member>
+    <member name="T:Vuforia.WebCamARController">
+      <summary>
+            This MonoBehaviour manages the usage of a webcam for Play Mode in Windows or Mac.
+            </summary>
+    </member>
+    <member name="F:Vuforia.WebCamARController.RenderTextureLayer">
+      <summary>
+            The layer that will be used to render the background image
+            </summary>
+    </member>
+    <member name="P:Vuforia.WebCamARController.DeviceName">
+      <summary>
+            The name of the web cam device that is used
+            </summary>
+    </member>
+    <member name="P:Vuforia.WebCamARController.IsPlaying">
+      <summary>
+            If the web cam is currently capturing video
+            </summary>
+    </member>
+    <member name="T:Vuforia.WireframeBehaviour">
+      <summary>
+            This script renders the mesh from the MeshFilter as wireframe.
+            This is mainly supposed to be used for visualization/debugging purpoes. It uses GL.LINES to draw the wireframe,
+            which is not very fast for larger meshes.
+            In order to draw large wireframe meshes in an app, it is recommended to use 3rd party libraries such as Vectrosity.
+            </summary>
+    </member>
+    <member name="T:Vuforia.WireframeTrackableEventHandler">
+      <summary>
+            A custom handler that also hides the wireframe-renderer in the smart terrain
+            </summary>
+    </member>
+    <member name="M:Vuforia.WireframeTrackableEventHandler.OnTrackableStateChanged(Vuforia.TrackableBehaviour.Status,Vuforia.TrackableBehaviour.Status)">
+      <summary>
+            Implementation of the ITrackableEventHandler function called when the
+            tracking state changes.
+            </summary>
+    </member>
+  </members>
+</doc>

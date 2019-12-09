@@ -1,0 +1,14 @@
+{
+    "excludePlatforms": [], 
+    "includePlatforms": [], 
+    "name": "VuforiaScripts", 
+    "allowUnsafeCode": false, 
+    "versionDefines": [], 
+    "references": [
+        "Unity.ugui"
+    ], 
+    "precompiledReferences": [], 
+    "defineConstraints": [], 
+    "overrideReferences": false, 
+    "autoReferenced": true
+}
